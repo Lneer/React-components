@@ -1,4 +1,7 @@
 :root {
-  --main-background: #141f23;
-  --header-background: #141f23;
+  --main-background: #ccc;
+  --header-background: #000;
+  --primary-light:#fff;
+  --link-background:#242424;
+  --active-nav:#3f51b5;
 }
