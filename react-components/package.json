@@ -23,8 +23,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier:check": "prettier --config .prettierrc './src/**/*' --check",
-    "prettier:write": "prettier --config .prettierrc './src/**/*' --write"
+    "prettier:check": "npx prettier -c src/",
+    "prettier:write": "npx prettier -w src/"
   },
   "eslintConfig": {
     "extends": [
