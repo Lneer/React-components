@@ -14,6 +14,7 @@ const Album: React.FC<AlbumProps> = ({ data, page, limit }) => {
     if (!page) return data;
     return data.slice((page - 1) * limit, page * limit);
   };
+
   return (
     <AlbumContainer>
       {pagination(data, page, limit).map((elem) => (

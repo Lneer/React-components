@@ -1,8 +1,5 @@
 @import './colors.css';
 
-body {
-}
-
 *,
 * ::before,
 * ::after {
@@ -50,16 +47,4 @@ a {
   color: var(--primary-light);
   text-decoration: none;
   cursor: pointer;
-}
-
-button.active-top {
-  display: block;
-}
-
-button[disabled] {
-  opacity: 0.4;
-}
-
-button[disabled]:hover {
-  cursor: default;
 }

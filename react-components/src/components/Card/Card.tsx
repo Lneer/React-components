@@ -5,7 +5,7 @@ import CardProperty from './CardProperty';
 import styled from 'styled-components';
 
 interface CardProps {
-  pokemon: Pokemon;
+  pokemon?: Pokemon;
 }
 
 const Card: React.FC<CardProps> = ({ pokemon }) => {

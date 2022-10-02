@@ -23,6 +23,10 @@ export default class Search extends Component<SearchProps> {
     }
   }
 
+  componentDidUpdate(): void {
+    localStorage.setItem('searchValue', this.state.searchValue);
+  }
+
   componentWillUnmount(): void {
     localStorage.setItem('searchValue', this.state.searchValue);
   }

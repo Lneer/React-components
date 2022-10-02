@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { TypeIcons } from '../../assets/pokemon-type-icons';
 import pokeBall from '../../assets/pokeBall.svg';
-import Pokemon from 'types/pokemon';
+import Pokemon, { Type } from 'types/pokemon';
 
 interface CardInnerProps {
-  pokemon: Pokemon;
+  pokemon?: Pokemon;
 }
 
 interface CardInnerState {
@@ -32,7 +32,7 @@ export default class CardInner extends Component<CardInnerProps, CardInnerState>
     );
   };
 
-  mapping = (array: typeof this.props.pokemon.types): React.ReactNode => {
+  mapping = (array: Type[]): React.ReactNode => {
     return (
       <>
         {array.map((type, index) => (
@@ -42,16 +42,31 @@ export default class CardInner extends Component<CardInnerProps, CardInnerState>
     );
   };
 
-  cardTitle = (children: React.ReactNode, isSelected = false): React.ReactNode => {
+  cardTitle = (children?: React.ReactNode, isSelected = false): React.ReactNode => {
     return (
       <CardTitleContainer>
-        <CardTitle $isSelect={isSelected}>{this.props.pokemon.name}</CardTitle>
+        <CardTitle $isSelect={isSelected}>
+          {this.props.pokemon && this.props.pokemon.name}
+        </CardTitle>
         <CardSubtitle>{children}</CardSubtitle>
       </CardTitleContainer>
     );
   };
 
   render() {
+    if (!this.props.pokemon)
+      return (
+        <CardBody>
+          <CardImage src="./logo512.png" />
+          <DescriptionWrapper $isSelect={this.state.isSelected}>
+            <Description $isSelect={false}>
+              {this.cardTitle()}
+              {this.pokeBall()}
+            </Description>
+            <Description $isSelect={true}></Description>
+          </DescriptionWrapper>
+        </CardBody>
+      );
     return (
       <CardBody>
         <CardImage src={this.props.pokemon.img} alt={this.props.pokemon.name} />

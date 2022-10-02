@@ -18,6 +18,7 @@ export default class MainPage extends Component {
   render() {
     return (
       <>
+        <h1>Main Page</h1>
         <SearchSection>
           <Search onSearch={this.getSearchState} />
         </SearchSection>

@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import Pokemon from 'types/pokemon';
+import Pokemon, { Stats } from 'types/pokemon';
 
 interface CardPropertyProps {
-  pokemon: Pokemon;
+  pokemon?: Pokemon;
 }
 
 const CardProperty: React.FC<CardPropertyProps> = ({ pokemon }) => {
-  const statParser = (obj: typeof pokemon.stats) => {
+  const statParser = (obj: Stats) => {
     const keys = Object.keys(obj);
     return (
       <>
@@ -20,7 +20,7 @@ const CardProperty: React.FC<CardPropertyProps> = ({ pokemon }) => {
       </>
     );
   };
-
+  if (!pokemon) return <PropertyContainer />;
   return (
     <PropertyContainer>
       <Properties>
