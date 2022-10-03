@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import exampleBase from '../../.jest/examplePokemonBase.json';
 import Pokemon from 'types/pokemon';
 
-describe('Layout tests', () => {
+describe('Album tests', () => {
   it('is render without props', () => {
     render(<Album />);
 
