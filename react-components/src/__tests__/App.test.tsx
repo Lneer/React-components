@@ -22,7 +22,7 @@ describe('Routing tests', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/404/i)).toBeInTheDocument();
+    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
   });
 
   it('bad page', async () => {
@@ -33,6 +33,6 @@ describe('Routing tests', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/404/i)).toBeInTheDocument();
+    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
   });
 });
