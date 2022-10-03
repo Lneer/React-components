@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import Pokemon from 'types/pokemon';
 
 interface AlbumProps {
-  data?: Pokemon[];
+  data?: Pokemon[] | [];
 }
 
 const Album: React.FC<AlbumProps> = ({ data }) => {
-  if (!data) return <h3>No pokemons here...</h3>;
+  if (!data || !data.length) return <h3>No pokemons here...</h3>;
   return (
     <AlbumContainer>
       {data.map((elem) => (

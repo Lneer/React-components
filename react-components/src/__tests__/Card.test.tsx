@@ -25,17 +25,16 @@ const exampleCard = {
   is_default: true,
 };
 
-describe('Search tests', () => {
-  it('is render no props', () => {
-    render(<Card />);
-
-    expect(screen.getByAltText(/pokeball/i)).toBeInTheDocument();
-  });
-
+describe('Card tests', () => {
   it('is render with props', () => {
     render(<Card pokemon={exampleCard as Pokemon} />);
 
-    expect(screen.getByAltText('slowpoke')).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { name: 'slowpoke' })[0]).toBeInTheDocument();
+  });
+
+  it('is render no props', () => {
+    render(<Card />);
+    expect(screen.queryByRole('heading')).toBeEmptyDOMElement();
   });
 
   it('pokeballClick', () => {
@@ -43,5 +42,12 @@ describe('Search tests', () => {
 
     userEvent.click(screen.getByAltText(/pokeball/i));
     expect(screen.getByText(/Has been choosen/i)).toBeInTheDocument();
+  });
+
+  it('Card hover', () => {
+    render(<Card pokemon={exampleCard as Pokemon} />);
+
+    userEvent.hover(screen.getAllByRole('img')[0]);
+    expect(screen.getByText(/hp/i)).toBeInTheDocument();
   });
 });
