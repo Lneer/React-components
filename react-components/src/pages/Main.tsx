@@ -10,11 +10,16 @@ export default class MainPage extends Component {
   getSearchState = (value: string) => {
     this.setState({ value });
   };
-  filter = (elem: Pokemon[]) => {
-    if (!this.state.value.length) {
-      return elem;
-    } else return elem.filter((pokemon) => pokemon.name.includes(this.state.value));
+
+  pagination = (data: Pokemon[], page?: number, limit = 10) => {
+    if (!page) return data;
+    return data.slice((page - 1) * limit, page * limit);
   };
+
+  filter = (elem: Pokemon[]) => {
+    return elem.filter((pokemon) => pokemon.name.includes(this.state.value));
+  };
+
   render() {
     return (
       <>
@@ -22,7 +27,7 @@ export default class MainPage extends Component {
         <SearchSection>
           <Search onSearch={this.getSearchState} />
         </SearchSection>
-        <Album data={this.filter(pokemon as Pokemon[])} page={1} limit={20}></Album>
+        <Album data={this.filter(this.pagination(pokemon as Pokemon[], 1, 20))}></Album>
       </>
     );
   }

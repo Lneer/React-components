@@ -1,0 +1,540 @@
+[
+  {
+    "id": 79,
+    "name": "slowpoke",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/79.png",
+    "order": 125,
+
+    "height": 12,
+    "weight": 360,
+    "base_experience": 63,
+    "stats": {
+      "hp": 90,
+      "attack": 65,
+      "defense": 65,
+      "specialAttack": 40,
+      "specialDefense": 40,
+      "speed": 15
+    },
+    "types": ["water", "psychic"],
+    "is_default": true
+  },
+  {
+    "id": 80,
+    "name": "slowbro",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/80.png",
+    "order": 127,
+
+    "height": 16,
+    "weight": 785,
+    "base_experience": 172,
+    "stats": {
+      "hp": 95,
+      "attack": 75,
+      "defense": 110,
+      "specialAttack": 100,
+      "specialDefense": 80,
+      "speed": 30
+    },
+    "types": ["water", "psychic"],
+    "is_default": true
+  },
+  {
+    "id": 81,
+    "name": "magnemite",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/81.png",
+    "order": 132,
+    "height": 3,
+    "weight": 60,
+    "base_experience": 65,
+    "stats": {
+      "hp": 25,
+      "attack": 35,
+      "defense": 70,
+      "specialAttack": 95,
+      "specialDefense": 55,
+      "speed": 45
+    },
+    "types": ["electric", "steel"],
+    "is_default": true
+  },
+  {
+    "id": 82,
+    "name": "magneton",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/82.png",
+    "order": 133,
+    "height": 10,
+    "weight": 600,
+    "base_experience": 163,
+    "stats": {
+      "hp": 50,
+      "attack": 60,
+      "defense": 95,
+      "specialAttack": 120,
+      "specialDefense": 70,
+      "speed": 70
+    },
+    "types": ["electric", "steel"],
+    "is_default": true
+  },
+  {
+    "id": 83,
+    "name": "farfetchd",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/83.png",
+    "order": 135,
+
+    "height": 8,
+    "weight": 150,
+    "base_experience": 132,
+    "stats": {
+      "hp": 52,
+      "attack": 90,
+      "defense": 55,
+      "specialAttack": 58,
+      "specialDefense": 62,
+      "speed": 60
+    },
+    "types": ["normal", "flying"],
+    "is_default": true
+  },
+  {
+    "id": 84,
+    "name": "doduo",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/84.png",
+    "order": 137,
+
+    "height": 14,
+    "weight": 392,
+    "base_experience": 62,
+    "stats": {
+      "hp": 35,
+      "attack": 85,
+      "defense": 45,
+      "specialAttack": 35,
+      "specialDefense": 35,
+      "speed": 75
+    },
+    "types": ["normal", "flying"],
+    "is_default": true
+  },
+  {
+    "id": 85,
+    "name": "dodrio",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/85.png",
+    "order": 138,
+
+    "height": 18,
+    "weight": 852,
+    "base_experience": 165,
+    "stats": {
+      "hp": 60,
+      "attack": 110,
+      "defense": 70,
+      "specialAttack": 60,
+      "specialDefense": 60,
+      "speed": 110
+    },
+    "types": ["normal", "flying"],
+    "is_default": true
+  },
+  {
+    "id": 86,
+    "name": "seel",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/86.png",
+    "order": 139,
+
+    "height": 11,
+    "weight": 900,
+    "base_experience": 65,
+    "stats": {
+      "hp": 65,
+      "attack": 45,
+      "defense": 55,
+      "specialAttack": 45,
+      "specialDefense": 70,
+      "speed": 45
+    },
+    "types": ["water"],
+    "is_default": true
+  },
+  {
+    "id": 87,
+    "name": "dewgong",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/87.png",
+    "order": 140,
+
+    "height": 17,
+    "weight": 1200,
+    "base_experience": 166,
+    "stats": {
+      "hp": 90,
+      "attack": 70,
+      "defense": 80,
+      "specialAttack": 70,
+      "specialDefense": 95,
+      "speed": 70
+    },
+    "types": ["water", "ice"],
+    "is_default": true
+  },
+  {
+    "id": 88,
+    "name": "grimer",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/88.png",
+    "order": 141,
+
+    "height": 9,
+    "weight": 300,
+    "base_experience": 65,
+    "stats": {
+      "hp": 80,
+      "attack": 80,
+      "defense": 50,
+      "specialAttack": 40,
+      "specialDefense": 50,
+      "speed": 25
+    },
+    "types": ["poison"],
+    "is_default": true
+  },
+  {
+    "id": 89,
+    "name": "muk",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/89.png",
+    "order": 143,
+
+    "height": 12,
+    "weight": 300,
+    "base_experience": 175,
+    "stats": {
+      "hp": 105,
+      "attack": 105,
+      "defense": 75,
+      "specialAttack": 65,
+      "specialDefense": 100,
+      "speed": 50
+    },
+    "types": ["poison"],
+    "is_default": true
+  },
+  {
+    "id": 90,
+    "name": "shellder",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/90.png",
+    "order": 145,
+
+    "height": 3,
+    "weight": 40,
+    "base_experience": 61,
+    "stats": {
+      "hp": 30,
+      "attack": 65,
+      "defense": 100,
+      "specialAttack": 45,
+      "specialDefense": 25,
+      "speed": 40
+    },
+    "types": ["water"],
+    "is_default": true
+  },
+  {
+    "id": 91,
+    "name": "cloyster",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/91.png",
+    "order": 146,
+
+    "height": 15,
+    "weight": 1325,
+    "base_experience": 184,
+    "stats": {
+      "hp": 50,
+      "attack": 95,
+      "defense": 180,
+      "specialAttack": 85,
+      "specialDefense": 45,
+      "speed": 70
+    },
+    "types": ["water", "ice"],
+    "is_default": true
+  },
+  {
+    "id": 92,
+    "name": "gastly",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/92.png",
+    "order": 147,
+
+    "height": 13,
+    "weight": 1,
+    "base_experience": 62,
+    "stats": {
+      "hp": 30,
+      "attack": 35,
+      "defense": 30,
+      "specialAttack": 100,
+      "specialDefense": 35,
+      "speed": 80
+    },
+    "types": ["ghost", "poison"],
+    "is_default": true
+  },
+  {
+    "id": 93,
+    "name": "haunter",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/93.png",
+    "order": 148,
+
+    "height": 16,
+    "weight": 1,
+    "base_experience": 142,
+    "stats": {
+      "hp": 45,
+      "attack": 50,
+      "defense": 45,
+      "specialAttack": 115,
+      "specialDefense": 55,
+      "speed": 95
+    },
+    "types": ["ghost", "poison"],
+    "is_default": true
+  },
+  {
+    "id": 94,
+    "name": "gengar",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png",
+    "order": 149,
+
+    "height": 15,
+    "weight": 405,
+    "base_experience": 250,
+    "stats": {
+      "hp": 60,
+      "attack": 65,
+      "defense": 60,
+      "specialAttack": 130,
+      "specialDefense": 75,
+      "speed": 110
+    },
+    "types": ["ghost", "poison"],
+    "is_default": true
+  },
+  {
+    "id": 95,
+    "name": "onix",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/95.png",
+    "order": 151,
+
+    "height": 88,
+    "weight": 2100,
+    "base_experience": 77,
+    "stats": {
+      "hp": 35,
+      "attack": 45,
+      "defense": 160,
+      "specialAttack": 30,
+      "specialDefense": 45,
+      "speed": 70
+    },
+    "types": ["rock", "ground"],
+    "is_default": true
+  },
+  {
+    "id": 96,
+    "name": "drowzee",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/96.png",
+    "order": 154,
+
+    "height": 10,
+    "weight": 324,
+    "base_experience": 66,
+    "stats": {
+      "hp": 60,
+      "attack": 48,
+      "defense": 45,
+      "specialAttack": 43,
+      "specialDefense": 90,
+      "speed": 42
+    },
+    "types": ["psychic"],
+    "is_default": true
+  },
+  {
+    "id": 97,
+    "name": "hypno",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/97.png",
+    "order": 155,
+
+    "height": 16,
+    "weight": 756,
+    "base_experience": 169,
+    "stats": {
+      "hp": 85,
+      "attack": 73,
+      "defense": 70,
+      "specialAttack": 73,
+      "specialDefense": 115,
+      "speed": 67
+    },
+    "types": ["psychic"],
+    "is_default": true
+  },
+  {
+    "id": 98,
+    "name": "krabby",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/98.png",
+    "order": 156,
+
+    "height": 4,
+    "weight": 65,
+    "base_experience": 65,
+    "stats": {
+      "hp": 30,
+      "attack": 105,
+      "defense": 90,
+      "specialAttack": 25,
+      "specialDefense": 25,
+      "speed": 50
+    },
+    "types": ["water"],
+    "is_default": true
+  },
+  {
+    "id": 99,
+    "name": "kingler",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/99.png",
+    "order": 157,
+
+    "height": 13,
+    "weight": 600,
+    "base_experience": 166,
+    "stats": {
+      "hp": 55,
+      "attack": 130,
+      "defense": 115,
+      "specialAttack": 50,
+      "specialDefense": 50,
+      "speed": 75
+    },
+    "types": ["water"],
+    "is_default": true
+  },
+  {
+    "id": 100,
+    "name": "voltorb",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/100.png",
+    "order": 158,
+
+    "height": 5,
+    "weight": 104,
+    "base_experience": 66,
+    "stats": {
+      "hp": 40,
+      "attack": 30,
+      "defense": 50,
+      "specialAttack": 55,
+      "specialDefense": 55,
+      "speed": 100
+    },
+    "types": ["electric"],
+    "is_default": true
+  },
+  {
+    "id": 101,
+    "name": "electrode",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/101.png",
+    "order": 159,
+
+    "height": 12,
+    "weight": 666,
+    "base_experience": 172,
+    "stats": {
+      "hp": 60,
+      "attack": 50,
+      "defense": 70,
+      "specialAttack": 80,
+      "specialDefense": 80,
+      "speed": 150
+    },
+    "types": ["electric"],
+    "is_default": true
+  },
+  {
+    "id": 102,
+    "name": "exeggcute",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/102.png",
+    "order": 160,
+
+    "height": 4,
+    "weight": 25,
+    "base_experience": 65,
+    "stats": {
+      "hp": 60,
+      "attack": 40,
+      "defense": 80,
+      "specialAttack": 60,
+      "specialDefense": 45,
+      "speed": 40
+    },
+    "types": ["grass", "psychic"],
+    "is_default": true
+  },
+  {
+    "id": 103,
+    "name": "exeggutor",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/103.png",
+    "order": 161,
+
+    "height": 20,
+    "weight": 1200,
+    "base_experience": 186,
+    "stats": {
+      "hp": 95,
+      "attack": 95,
+      "defense": 85,
+      "specialAttack": 125,
+      "specialDefense": 75,
+      "speed": 55
+    },
+    "types": ["grass", "psychic"],
+    "is_default": true
+  },
+  {
+    "id": 104,
+    "name": "cubone",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/104.png",
+    "order": 163,
+
+    "height": 4,
+    "weight": 65,
+    "base_experience": 64,
+    "stats": {
+      "hp": 50,
+      "attack": 50,
+      "defense": 95,
+      "specialAttack": 40,
+      "specialDefense": 50,
+      "speed": 35
+    },
+    "types": ["ground"],
+    "is_default": true
+  },
+  {
+    "id": 105,
+    "name": "marowak",
+    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/105.png",
+    "order": 164,
+
+    "height": 10,
+    "weight": 450,
+    "base_experience": 149,
+    "stats": {
+      "hp": 60,
+      "attack": 80,
+      "defense": 110,
+      "specialAttack": 50,
+      "specialDefense": 80,
+      "speed": 45
+    },
+    "types": ["ground"],
+    "is_default": true
+  }
+]

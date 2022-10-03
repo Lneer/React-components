@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { Search } from '../components';
 import { storageMock } from '../../.jest/local.storage';
 import userEvent from '@testing-library/user-event';
@@ -9,6 +9,7 @@ const onChange = jest.fn();
 
 beforeEach(() => {
   window.localStorage.clear();
+  cleanup();
 });
 
 describe('Search tests', () => {
@@ -28,7 +29,7 @@ describe('Search tests', () => {
   it('get value from localStorage ', () => {
     window.localStorage.setItem('searchValue', 'testValue');
     render(<Search onSearch={onChange} />);
-    // expect(screen.debug());
+
     expect(screen.queryByDisplayValue('testValue')).toBeInTheDocument();
   });
 
@@ -37,6 +38,7 @@ describe('Search tests', () => {
 
     userEvent.type(screen.getByRole('textbox'), 'test');
     unmount();
+
     expect(window.localStorage.getItem('searchValue')).toEqual('test');
   });
 

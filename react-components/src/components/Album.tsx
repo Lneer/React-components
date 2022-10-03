@@ -4,20 +4,14 @@ import styled from 'styled-components';
 import Pokemon from 'types/pokemon';
 
 interface AlbumProps {
-  data: Pokemon[];
-  page?: number;
-  limit?: number;
+  data?: Pokemon[];
 }
 
-const Album: React.FC<AlbumProps> = ({ data, page, limit }) => {
-  const pagination = (data: Pokemon[], page?: number, limit = 10) => {
-    if (!page) return data;
-    return data.slice((page - 1) * limit, page * limit);
-  };
-
+const Album: React.FC<AlbumProps> = ({ data }) => {
+  if (!data) return <h3>No pokemons here...</h3>;
   return (
     <AlbumContainer>
-      {pagination(data, page, limit).map((elem) => (
+      {data.map((elem) => (
         <Card key={elem.id} pokemon={elem}></Card>
       ))}
     </AlbumContainer>
