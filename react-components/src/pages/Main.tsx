@@ -1,4 +1,4 @@
-import { Album, Search } from 'components';
+import { Album, PageHero, Search } from 'components';
 import React, { Component } from 'react';
 import Pokemon from 'types/pokemon';
 import pokemon from '../types/pokemon.json';
@@ -23,7 +23,7 @@ export default class MainPage extends Component {
   render() {
     return (
       <>
-        <h1>Main Page</h1>
+        <PageHero label="Main Page" />
         <SearchSection>
           <Search onSearch={this.getSearchState} />
         </SearchSection>
