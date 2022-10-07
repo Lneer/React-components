@@ -1,7 +1,7 @@
 import React from 'react';
 import { NotFoundPage, AboutPage, MainPage } from 'pages';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Layout from 'components/Layout/Layout';
+import { Layout } from 'components';
 
 function App() {
   return (

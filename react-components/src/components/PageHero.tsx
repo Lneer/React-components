@@ -15,8 +15,6 @@ const PageHero: React.FC<PageHeroProps> = ({ label, children }) => {
   );
 };
 
-export default PageHero;
-
 const StyledHero = styled.section`
   width: 100%;
   height: 10vh;
@@ -25,3 +23,5 @@ const StyledHero = styled.section`
   padding-top: 2rem;
   background-color: var(--hero-background);
 `;
+
+export default PageHero;

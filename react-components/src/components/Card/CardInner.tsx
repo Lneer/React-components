@@ -12,11 +12,8 @@ interface CardInnerState {
   isSelected: boolean;
 }
 
-export default class CardInner extends Component<CardInnerProps, CardInnerState> {
-  constructor(props: CardInnerProps) {
-    super(props);
-    this.state = { isSelected: false };
-  }
+class CardInner extends Component<CardInnerProps, CardInnerState> {
+  state = { isSelected: false };
 
   setCardSelector = (): void => {
     this.setState(() => {
@@ -33,13 +30,7 @@ export default class CardInner extends Component<CardInnerProps, CardInnerState>
   };
 
   mapping = (array: Type[]): React.ReactNode => {
-    return (
-      <>
-        {array.map((type, index) => (
-          <TypeIcon key={index} src={TypeIcons[type]} title={type} />
-        ))}
-      </>
-    );
+    return array.map((type, index) => <TypeIcon key={index} src={TypeIcons[type]} title={type} />);
   };
 
   cardTitle = (children?: React.ReactNode, isSelected = false): React.ReactNode => {
@@ -54,7 +45,7 @@ export default class CardInner extends Component<CardInnerProps, CardInnerState>
   };
 
   render() {
-    if (!this.props.pokemon)
+    if (!this.props.pokemon) {
       return (
         <CardBody>
           <CardImage src="./logo512.png" />
@@ -67,6 +58,8 @@ export default class CardInner extends Component<CardInnerProps, CardInnerState>
           </DescriptionWrapper>
         </CardBody>
       );
+    }
+
     return (
       <CardBody>
         <CardImage src={this.props.pokemon.img} alt={this.props.pokemon.name} />
@@ -103,6 +96,11 @@ const DescriptionWrapper = styled.div<{ $isSelect: boolean }>`
   ${({ $isSelect }) => ($isSelect ? 'transform: translateX(-35%)' : 'transform: translateX(0)')}
 `;
 
+const Toggle = css`
+  background: var(--card-primary);
+  color: var(--primary-light);
+`;
+
 const Description = styled.div<{ $isSelect: boolean }>`
   width: 50%;
   height: 100%;
@@ -110,14 +108,7 @@ const Description = styled.div<{ $isSelect: boolean }>`
   overflow: hidden;
   transition: transform 0.5s;
   color: var(--primary-dark);
-  ${({ $isSelect }) => {
-    if ($isSelect) {
-      return css`
-        background: var(--card-primary);
-        color: var(--primary-light);
-      `;
-    }
-  }}
+  ${({ $isSelect }) => ($isSelect && Toggle ? Toggle : '')}
 `;
 
 const CardTitleContainer = styled.div`
@@ -145,14 +136,7 @@ const Button = styled.div<{ $isSelect: boolean }>`
   height: 100%;
   transition: transform 0.5s;
   padding: 10px 10px;
-
-  ${({ $isSelect }) => {
-    if ($isSelect) {
-      return css`
-        background: var(--card-primary);
-      `;
-    }
-  }}
+  ${({ $isSelect }) => ($isSelect && Toggle ? Toggle : '')}
 
   &:hover > img {
     transition: transform 0.5s;
@@ -169,3 +153,4 @@ const TypeIcon = styled.img`
     transform: scale(1.1);
   }
 `;
+export default CardInner;

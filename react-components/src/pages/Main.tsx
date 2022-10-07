@@ -4,7 +4,7 @@ import Pokemon from 'types/pokemon';
 import pokemon from '../types/pokemon.json';
 import styled from 'styled-components';
 
-export default class MainPage extends Component {
+class MainPage extends Component {
   state = { value: localStorage.getItem('searchValue') || '' };
 
   getSearchState = (value: string) => {
@@ -41,3 +41,5 @@ const SearchSection = styled.section`
   justify-content: center;
   align-items: center;
 `;
+
+export default MainPage;

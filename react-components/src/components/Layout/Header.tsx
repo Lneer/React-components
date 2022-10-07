@@ -15,8 +15,6 @@ const Header = () => {
   );
 };
 
-export default Header;
-
 const HeaderContainer = styled.header`
   display: flex;
   justify-content: center;
@@ -51,3 +49,4 @@ const NaigaitionItem = styled(NavLink)`
 		letter-spacing: 2px;
   }
 `;
+export default Header;

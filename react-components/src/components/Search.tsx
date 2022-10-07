@@ -5,7 +5,12 @@ import styled from 'styled-components';
 interface SearchProps {
   onSearch: (data: string) => void;
 }
-export default class Search extends Component<SearchProps> {
+
+interface SearchState {
+  searchValue: string;
+}
+
+class Search extends Component<SearchProps, SearchState> {
   state = { searchValue: '' };
 
   stateManager(state: string) {
@@ -50,6 +55,7 @@ export default class Search extends Component<SearchProps> {
     );
   }
 }
+
 const SearchBox = styled.div`
   height: 60%;
   display: flex;
@@ -89,3 +95,5 @@ const Button = styled.button`
     transform: scale(0.85);
   }
 `;
+
+export default Search;

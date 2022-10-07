@@ -9,18 +9,16 @@ interface CardPropertyProps {
 const CardProperty: React.FC<CardPropertyProps> = ({ pokemon }) => {
   const statParser = (obj: Stats) => {
     const keys = Object.keys(obj);
-    return (
-      <>
-        {keys.map((stat, index) => (
-          <p key={index}>
-            <strong>{stat}:</strong>
-            {` ${obj[stat as keyof typeof obj]}`}
-          </p>
-        ))}
-      </>
-    );
+    return keys.map((stat, index) => (
+      <p key={index}>
+        <strong>{stat}:</strong>
+        {` ${obj[stat as keyof typeof obj]}`}
+      </p>
+    ));
   };
+
   if (!pokemon) return <PropertyContainer />;
+
   return (
     <PropertyContainer>
       <Properties>
@@ -40,8 +38,6 @@ const CardProperty: React.FC<CardPropertyProps> = ({ pokemon }) => {
     </PropertyContainer>
   );
 };
-
-export default CardProperty;
 
 const PropertyContainer = styled.div`
   width: 140px;
@@ -89,3 +85,5 @@ const BasicStats = styled.div`
   grid-template-rows: 1fr 1fr;
   gap: 5px;
 `;
+
+export default CardProperty;

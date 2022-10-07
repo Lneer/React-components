@@ -1,7 +1,7 @@
 import { PageHero } from 'components';
 import React, { Component } from 'react';
 
-export default class AboutPage extends Component {
+class AboutPage extends Component {
   render() {
     return (
       <>
@@ -15,3 +15,5 @@ export default class AboutPage extends Component {
     );
   }
 }
+
+export default AboutPage;
