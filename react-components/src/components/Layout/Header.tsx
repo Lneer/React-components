@@ -10,6 +10,7 @@ const Header = () => {
           Home
         </NaigaitionItem>
         <NaigaitionItem to="/about">About</NaigaitionItem>
+        <NaigaitionItem to="/form">Form</NaigaitionItem>
       </NavbarContainer>
     </HeaderContainer>
   );
