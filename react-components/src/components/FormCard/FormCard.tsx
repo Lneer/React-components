@@ -8,11 +8,28 @@ class FormCard extends Component {
         <StyledFormCard>
           <Header src="./images/cardHeader.png" alt="header" />
           <CardContent>
-            <UserImageContaiter>
-              <ImageWrapper>
-                <UserImage src="./images/tes1t.jpg" alt="logo" />
-              </ImageWrapper>
-            </UserImageContaiter>
+            <div>
+              <UserImageContaiter>
+                <ImageWrapper>
+                  <UserImage src="./images/tes1t.jpg" alt="logo" />
+                </ImageWrapper>
+              </UserImageContaiter>
+            </div>
+            <UserData>
+              <p>
+                <span>Name: </span>Aleks
+              </p>
+              <p>
+                <span>NickName: </span>Lneer
+              </p>
+              <p>
+                <span>Age: </span>35
+              </p>
+
+              <div>
+                <span>Hobby:</span>
+              </div>
+            </UserData>
           </CardContent>
           <MapImage src="./images/map.png" alt="map" />
           <Footer src="./images/cardFooter.png" alt="footer" />
@@ -64,7 +81,11 @@ const Footer = styled.img`
 
 const CardContent = styled.div`
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 10px;
 `;
+
 const UserImageContaiter = styled.div`
   width: 35%;
   aspect-ratio: 11/16;
@@ -103,5 +124,21 @@ const ImageWrapper = styled.div`
   align-items: center;
 
   overflow: hidden;
+`;
+
+const UserData = styled.div`
+  padding-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #fff;
+  & span {
+    color: #7c6c4e;
+    font-weight: bold;
+  }
+
+  & p {
+    color: #f5f3f0;
+  }
 `;
 export default FormCard;
