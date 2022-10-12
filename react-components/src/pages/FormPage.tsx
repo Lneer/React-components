@@ -1,18 +1,45 @@
-import { Form, PageHero, SimpleForm } from 'components';
+import { Form, PageHero } from 'components';
 import FormCard from 'components/FormCard/FormCard';
 import React, { Component } from 'react';
+import styled from 'styled-components';
+import { UserData } from 'types/form/userData';
 
-class FormPage extends Component {
+interface FormPageProps {
+  name?: string;
+}
+interface FormPageState {
+  data: UserData[];
+}
+class FormPage extends Component<FormPageProps, FormPageState> {
+  state = { data: [] as UserData[] };
+
+  getFormData = (data: UserData) => {
+    const currentState = [...this.state.data];
+    currentState.push(data);
+    this.setState({ data: currentState });
+  };
+
   render() {
     return (
       <>
         <PageHero label="Form"></PageHero>
 
-        <SimpleForm sendCard={(data) => console.log(data)}></SimpleForm>
-        <FormCard></FormCard>
+        <Form sendCard={(data) => this.getFormData(data)}></Form>
+        <StyledCardWrapper>
+          {this.state.data.map((data) => (
+            <FormCard userData={data} key={`${data.name}_${data.nick}`}></FormCard>
+          ))}
+        </StyledCardWrapper>
       </>
     );
   }
 }
+
+const StyledCardWrapper = styled.div`
+  margin-top: 20px;
+  display: grid;
+  gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+`;
 
 export default FormPage;

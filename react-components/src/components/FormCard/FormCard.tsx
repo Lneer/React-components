@@ -1,7 +1,12 @@
+import { hobbyIcon } from 'assets/hobbyIcons';
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
+import { UserData } from 'types/form/userData';
 
-class FormCard extends Component {
+interface FormCardProps {
+  userData: UserData;
+}
+class FormCard extends Component<FormCardProps> {
   render() {
     return (
       <Wrapper>
@@ -11,25 +16,37 @@ class FormCard extends Component {
             <div>
               <UserImageContaiter>
                 <ImageWrapper>
-                  <UserImage src="./images/tes1t.jpg" alt="logo" />
+                  <UserImage src={this.props.userData.img} alt="logo" />
                 </ImageWrapper>
               </UserImageContaiter>
             </div>
-            <UserData>
+            <UserInfo>
               <p>
-                <span>Name: </span>Aleks
+                <span>Name: </span>
+                {this.props.userData.name}
               </p>
               <p>
-                <span>NickName: </span>Lneer
+                <span>NickName: </span>
+                {this.props.userData.nick}
               </p>
               <p>
-                <span>Age: </span>35
+                <span>Age: </span>
+                {this.props.userData.age}
               </p>
 
               <div>
                 <span>Hobby:</span>
+                <HobbyWrapper>
+                  {this.props.userData.hobby.map((hobby) => {
+                    return (
+                      <span key={hobby}>
+                        <img src={hobbyIcon[hobby as keyof typeof hobbyIcon]} alt={hobby} />
+                      </span>
+                    );
+                  })}
+                </HobbyWrapper>
               </div>
-            </UserData>
+            </UserInfo>
           </CardContent>
           <MapImage src="./images/map.png" alt="map" />
           <Footer src="./images/cardFooter.png" alt="footer" />
@@ -126,7 +143,7 @@ const ImageWrapper = styled.div`
   overflow: hidden;
 `;
 
-const UserData = styled.div`
+const UserInfo = styled.div`
   padding-top: 25px;
   display: flex;
   flex-direction: column;
@@ -139,6 +156,17 @@ const UserData = styled.div`
 
   & p {
     color: #f5f3f0;
+  }
+`;
+
+const HobbyWrapper = styled.div`
+  display: flex;
+  row-gap 10px;
+  column-gap 20px;
+  flex-wrap:wrap;
+  & img {
+    width: 30px;
+    heigth: 30px;
   }
 `;
 export default FormCard;
