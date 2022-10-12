@@ -133,11 +133,10 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
   };
 
   hobbyHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(this.hobby);
     const value = event.target.value.toLowerCase();
     this.hobby.has(value) ? this.hobby.delete(value) : this.hobby.add(value);
     this.setState({ hobbySelect: true });
-    console.log(this.hobby);
+    this.setSubmitButton();
   };
 
   submitHandler = (event: React.FormEvent) => {
