@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { SubmitContext } from 'Context/SubmitContext';
 import styled from 'styled-components';
+import { SubmitContext } from 'context/SubmitContext';
 import { validateConditions } from 'utils/formValidateConditions';
 import FormInner from './FormInner';
 import { UserData } from 'types/form/userData';
@@ -34,7 +34,7 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
 
   hobby = new Set<string>();
 
-  state = {
+  defaultState = {
     firstChangeForm: false,
     buttonDisabled: true,
     name: false,
@@ -45,6 +45,8 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
     switch: false,
     hobbySelect: true,
   };
+
+  state = this.defaultState;
 
   changeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const name = event.target.name;
@@ -139,6 +141,10 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
     this.setSubmitButton();
   };
 
+  showError = (fieldState: boolean) => {
+    return this.state.firstChangeForm ? fieldState : true;
+  };
+
   submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     console.log(this.state);
@@ -162,7 +168,9 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
       img: URL.createObjectURL(this.fileInput.current!.files![0]),
       hobby: Array.from(this.hobby),
     };
+
     this.props.sendCard(userData);
+    alert('data submited');
     this.resetStateInputs();
   };
 
@@ -176,17 +184,7 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
       ? this.nameInput.current
       : (this.genderSelect.current.value = 'default');
     this.hobby.clear();
-    this.setState({
-      firstChangeForm: false,
-      buttonDisabled: true,
-      name: false,
-      nick: false,
-      date: false,
-      file: false,
-      gender: false,
-      switch: false,
-      hobbySelect: true,
-    });
+    this.setState(this.defaultState);
   };
 
   render() {
@@ -194,35 +192,67 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
 
     return (
       <SubmitContext.Provider value={this.changeHandler}>
-        <StyledForm onSubmit={this.submitHandler}>
-          <Form.Item label="Name:" name="name" type="text" reference={this.nameInput} />
-          <Form.Item label="Nick name:" name="nick" type="text" reference={this.nickNameInput} />
-          <Form.Item label="Birth Day:" name="date" type="date" reference={this.dateInput} />
-          <Form.Item label="Avatar:" name="file" type="file" reference={this.fileInput} />
-          <label>
-            <h3>Select gender:</h3>
-            <StyledSelect
-              name="gender"
-              defaultValue="default"
-              ref={this.genderSelect}
-              onChange={(e) => {
-                if (this.genderSelect.current) {
-                  this.genderSelect.current.value = e.target.value;
-                  this.changeHandler(e);
-                }
-              }}
-            >
-              <option value="default">---</option>
-              <option value="male">male</option>
-              <option value="female">female</option>
-              <option value="other">other</option>
-            </StyledSelect>
-          </label>
+        <StyledForm onSubmit={this.submitHandler} data-testid="form">
+          <Form.Item
+            label="Name:"
+            name="name"
+            type="text"
+            reference={this.nameInput}
+            valid={this.showError(this.state.name)}
+            errormassege="The field must contain from 3 to 12 characters"
+            testId="name"
+          />
+
+          <Form.Item
+            label="Nick name:"
+            name="nick"
+            type="text"
+            reference={this.nickNameInput}
+            valid={this.showError(this.state.nick)}
+            errormassege="The field must contain from 3 to 12 characters"
+            testId="nick"
+          />
+
+          <Form.Item
+            label="Birth Day:"
+            name="date"
+            type="date"
+            reference={this.dateInput}
+            valid={this.showError(this.state.date)}
+            errormassege="Your age must be between 3 and 100 years old"
+            testId="date"
+          />
+
+          <Form.Item
+            label="Avatar:"
+            name="file"
+            type="file"
+            reference={this.fileInput}
+            valid={this.showError(this.state.file)}
+            errormassege="Choose you avatar"
+            testId="avatar"
+          />
+
+          <Form.Item
+            label="Gender: "
+            name="gender"
+            type="select"
+            reference={this.genderSelect}
+            valid={this.showError(this.state.gender)}
+            errormassege="how do you feel"
+            testId="gender"
+          >
+            <option value="default">---</option>
+            <option value="male">male</option>
+            <option value="female">female</option>
+            <option value="other">other</option>
+          </Form.Item>
+
           <StyledField>
             <legend>
               <h3>Select hobby </h3>
             </legend>
-            <StyledCheckBoxWrapper>
+            <StyledCheckBoxWrapper data-testid="hobby">
               {hobby.map((hobby) => {
                 return (
                   <label key={hobby}>
@@ -232,29 +262,31 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
                       value={hobby.toLowerCase()}
                       checked={this.hobby.has(hobby.toLowerCase())}
                       onChange={this.hobbyHandler}
+                      data-testid={hobby}
                     />
                   </label>
                 );
               })}
             </StyledCheckBoxWrapper>
           </StyledField>
-          <div>
-            <h3>Confirm form data:</h3>
-            <SwitchInput
-              type="checkbox"
-              id="switch"
-              name="switch"
-              ref={this.switchInput}
-              onChange={this.changeHandler}
-            />
-            <SwitchLabel htmlFor="switch" />
-          </div>
+
+          <Form.Item
+            label="Confirm data:"
+            name="switch"
+            type="switch"
+            reference={this.switchInput}
+            valid={this.showError(this.state.switch)}
+            errormassege="Check data"
+            testId="check"
+          />
+
           <div>
             <StyledSubmitInput
               id="submit"
               type="submit"
               name="submit"
               disabled={this.state.buttonDisabled}
+              data-testid="submit"
             />
             <StyledSubmitLabel htmlFor="submit">Submit</StyledSubmitLabel>
           </div>
@@ -267,23 +299,12 @@ class Form extends Component<SimpleFormProps, SimpleFormState> {
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 5px;
   width: 33vw;
   margin: 0 auto;
   padding: 2rem;
   border: 5px solid #7c6c4e;
   border-radius: 20px;
-`;
-
-const StyledSelect = styled.select`
-  width: 80%;
-  padding: 2px 20px;
-  display: block;
-  font-size: 1.2rem;
-  height: 2rem;
-  border: 3px solid #7c6c4e;
-  border-radius: 100px;
-  background-color: #d4c7b5;
 `;
 
 const StyledField = styled.fieldset`
@@ -310,46 +331,6 @@ const StyledCheckBoxWrapper = styled.div`
   }
 `;
 
-const SwitchLabel = styled.label`
-  cursor: pointer;
-  text-indent: -9999px;
-  width: 80px;
-  height: 2rem;
-  background: grey;
-  display: block;
-  border: 2px solid #7c6c4e;
-  border-radius: 100px;
-  position: relative;
-  &:after {
-    content: '';
-    position: absolute;
-    top: 1px;
-    left: 1px;
-    width: 26px;
-    height: 26px;
-    background: #fff;
-    border-radius: 90px;
-    transition: 0.3s;
-  }
-  &:active:after {
-    width: 35px;
-  }
-`;
-
-const SwitchInput = styled.input`
-  height: 0;
-  width: 0;
-  visibility: hidden;
-  position: absolute;
-  &:checked + label {
-    background: #d4c7b5;
-  }
-  &:checked + label:after {
-    left: calc(100% - 5px);
-    transform: translateX(-100%);
-  }
-`;
-
 const StyledSubmitLabel = styled.label`
 width:120px;
 background: #d4c7b5;
@@ -359,7 +340,6 @@ padding 10px 20px;
 color: var(--primary-dark);
 font-weight:bold;
 cursor:pointer;
-
 &:active {
   transform: scale(0.6);
 }

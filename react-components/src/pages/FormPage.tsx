@@ -1,7 +1,6 @@
-import { Form, PageHero } from 'components';
-import FormCard from 'components/FormCard/FormCard';
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Form, PageHero, FormCard } from 'components';
 import { UserData } from 'types/form/userData';
 
 interface FormPageProps {

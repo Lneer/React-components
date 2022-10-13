@@ -4,40 +4,45 @@ import styled, { css } from 'styled-components';
 import { UserData } from 'types/form/userData';
 
 interface FormCardProps {
-  userData: UserData;
+  userData?: UserData;
 }
+
 class FormCard extends Component<FormCardProps> {
   render() {
     return (
-      <Wrapper>
+      <Wrapper data-testid="formCard">
         <StyledFormCard>
           <Header src="./images/cardHeader.png" alt="header" />
           <CardContent>
             <div>
               <UserImageContaiter>
                 <ImageWrapper>
-                  <UserImage src={this.props.userData.img} alt="logo" />
+                  <UserImage src={this.props.userData?.img} alt="logo" />
                 </ImageWrapper>
               </UserImageContaiter>
             </div>
             <UserInfo>
               <p>
                 <span>Name: </span>
-                {this.props.userData.name}
+                {this.props.userData?.name}
               </p>
               <p>
                 <span>NickName: </span>
-                {this.props.userData.nick}
+                {this.props.userData?.nick}
               </p>
               <p>
                 <span>Age: </span>
-                {this.props.userData.age}
+                {this.props.userData?.age}
+              </p>
+              <p>
+                <span>Sex: </span>
+                {this.props.userData?.gender}
               </p>
 
               <div>
                 <span>Hobby:</span>
                 <HobbyWrapper>
-                  {this.props.userData.hobby.map((hobby) => {
+                  {this.props.userData?.hobby.map((hobby) => {
                     return (
                       <span key={hobby}>
                         <img src={hobbyIcon[hobby as keyof typeof hobbyIcon]} alt={hobby} />
@@ -147,9 +152,10 @@ const UserInfo = styled.div`
   padding-top: 25px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
   color: #fff;
   & span {
+    font-size: 0.8rem;
     color: #7c6c4e;
     font-weight: bold;
   }
