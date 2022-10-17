@@ -11,6 +11,7 @@ const Header = () => {
         </NaigaitionItem>
         <NaigaitionItem to="/about">About</NaigaitionItem>
         <NaigaitionItem to="/form">Form</NaigaitionItem>
+        <NaigaitionItem to="/api">Api</NaigaitionItem>
       </NavbarContainer>
     </HeaderContainer>
   );
