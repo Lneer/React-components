@@ -95,20 +95,19 @@ class FormInner extends Component<FormInnerProps> {
   }
 }
 
-const BorderMode = css<{ $vaild: boolean }>`
-  ${({ $vaild }) =>
-    $vaild ? 'border: 3px solid #7c6c4e' : 'border: 3px solid var(--error-primary)'}
+const borderMode = css<{ $vaild: boolean }>`
+  border: ${({ $vaild }) => ($vaild ? '3px solid #7c6c4e' : '3px solid var(--error-primary)')};
 `;
 
-const VisionMode = css<{ $vaild: boolean }>`
-  ${({ $vaild }) => ($vaild ? 'visibility: hidden' : 'visibility: visible')}
+const visionMode = css<{ $vaild: boolean }>`
+  visibility: ${({ $vaild }) => ($vaild ? ' hidden' : ' visible')};
 `;
 
 const StyledInputWrapper = styled.div<{ $vaild: boolean }>`
   width: 80%;
   border-radius: 100px;
   background-color: #d4c7b5;
-  ${BorderMode}
+  ${borderMode}
 `;
 
 const StyledInput = styled.input`
@@ -126,7 +125,7 @@ const StyledErrorMessege = styled.div<{ $vaild: boolean }>`
   font-size: 0.8rem;
   width: 80%;
   text-align: center;
-  ${VisionMode}
+  ${visionMode}
 `;
 
 const StyledSelect = styled.select<{ $vaild: boolean }>`
@@ -137,7 +136,7 @@ const StyledSelect = styled.select<{ $vaild: boolean }>`
   height: 2rem;
   border-radius: 100px;
   background-color: #d4c7b5;
-  ${BorderMode}
+  ${borderMode}
 `;
 const SwitchInput = styled.input`
   height: 0;

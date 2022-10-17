@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import pokeBall from '../assets/pokeBall.svg';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface SearchProps {
   onSearch: (data: string) => void;
@@ -56,6 +56,11 @@ class Search extends Component<SearchProps, SearchState> {
   }
 }
 
+const inputFulltWidth = css`
+  width: 30%;
+  padding-left: 2rem;
+`;
+
 const SearchBox = styled.div`
   height: 60%;
   display: flex;
@@ -80,7 +85,7 @@ const StyledInput = styled.input<{ $isEmpty: boolean }>`
   transition: 1s;
   background: none;
   outline: 0;
-  ${({ $isEmpty }) => ($isEmpty ? 'width: 0;' : 'width: 30vw; padding-left: 2rem;')};
+  ${({ $isEmpty }) => ($isEmpty ? 'width: 0;' : inputFulltWidth)};
 `;
 
 const Button = styled.button`
