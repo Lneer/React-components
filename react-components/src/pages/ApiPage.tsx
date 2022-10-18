@@ -1,4 +1,4 @@
-import { ApiCard, PageHero, Search } from 'components';
+import { ApiCard, Modal, ModalInner, PageHero, Search } from 'components';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { NamedAPIResourceList } from 'types/api/responseTypes';
@@ -10,12 +10,14 @@ interface ApiPageProps {
 }
 
 interface ApiPageState {
+  modalView: boolean;
   value: string;
   resourceList: NamedAPIResourceList;
 }
 
 class ApiPage extends Component<ApiPageProps, ApiPageState> {
   defaultState: ApiPageState = {
+    modalView: true,
     value: localStorage.getItem('searchValue') || '',
     resourceList: { count: 0, next: null, previous: null, results: [] },
   };
@@ -56,8 +58,9 @@ class ApiPage extends Component<ApiPageProps, ApiPageState> {
             ></ApiCard>
           ))}
         </AlbumContainer>
-
-        {/* <Album data={this.filter(this.pagination(pokemon as Pokemon[], 1, 20))}></Album> */}
+        <Modal visible={this.state.modalView}>
+          <ModalInner />
+        </Modal>
       </>
     );
   }

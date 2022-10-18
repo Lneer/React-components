@@ -39,37 +39,25 @@ class ApiCard extends Component<ApiCardProps, ApiCardState> {
 
   render() {
     if (!this.props) {
-      return (
+      return null;
+    }
+    return (
+      <>
         <CardWrapper>
           <CardBody>
-            <CardImage src="./logo512.png" />
+            <CardImage src={this.props.img} alt={this.props.name} />
             <DescriptionWrapper $isSelect={this.state.isSelected}>
               <Description $isSelect={false}>
                 {this.cardTitle()}
                 {this.pokeBall()}
               </Description>
-              <Description $isSelect={true}></Description>
+              <Description $isSelect={true}>
+                {this.cardTitle(<p>Has been choosen</p>, true)}
+              </Description>
             </DescriptionWrapper>
           </CardBody>
         </CardWrapper>
-      );
-    }
-
-    return (
-      <CardWrapper>
-        <CardBody>
-          <CardImage src={this.props.img} alt={this.props.name} />
-          <DescriptionWrapper $isSelect={this.state.isSelected}>
-            <Description $isSelect={false}>
-              {this.cardTitle()}
-              {this.pokeBall()}
-            </Description>
-            <Description $isSelect={true}>
-              {this.cardTitle(<p>Has been choosen</p>, true)}
-            </Description>
-          </DescriptionWrapper>
-        </CardBody>
-      </CardWrapper>
+      </>
     );
   }
 }
@@ -91,7 +79,7 @@ const DescriptionWrapper = styled.div<{ $isSelect: boolean }>`
   transition: transform 0.5s;
   display: flex;
   color: var(--primary-dark);
-  ${({ $isSelect }) => ($isSelect ? 'transform: translateX(-35%)' : 'transform: translateX(0)')}
+  transform: ${({ $isSelect }) => ($isSelect ? ' translateX(-35%)' : 'transform:translateX(0)')};
 `;
 
 const Toggle = css`
