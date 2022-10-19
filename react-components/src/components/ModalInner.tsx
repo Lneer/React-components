@@ -12,10 +12,11 @@ interface ModalInnerProps {
 
 interface ModalInnerState {
   modalInfo: PokemonInfo | null;
+  loaded: boolean;
 }
 
 class ModalInner extends Component<ModalInnerProps, ModalInnerState> {
-  state: ModalInnerState = { modalInfo: null };
+  state: ModalInnerState = { modalInfo: null, loaded: false };
   pokemon = this.state.modalInfo;
 
   componentDidMount() {
@@ -28,6 +29,10 @@ class ModalInner extends Component<ModalInnerProps, ModalInnerState> {
     );
   }
 
+  componentWillUnmount(): void {
+    this.setState({ modalInfo: null });
+  }
+
   mapping = (array: FullType[]) => {
     return array.map((type) => (
       <TypeIcon
@@ -38,21 +43,31 @@ class ModalInner extends Component<ModalInnerProps, ModalInnerState> {
     ));
   };
 
+  capitalize = (str: string) => {
+    return str[0].toUpperCase + str.slice(1);
+  };
+
   render() {
     if (!this.state.modalInfo) {
-      return <Spin size="large" />;
+      return <Spin size="large" spinning={true} />;
     }
 
     return (
       <StyledContainer>
         <StyledImageContainer>
-          <StyledHeader>{this.state.modalInfo.name}</StyledHeader>
+          <StyledHeader>{this.capitalize(this.state.modalInfo.name)}</StyledHeader>
+          {!this.state.loaded && (
+            <StyledImageSpiner>
+              <Spin size="large" spinning={true} />
+            </StyledImageSpiner>
+          )}
           <StyledImage
             src={
               (this.state.modalInfo.sprites.other.dream_world.front_default as string)
                 ? (this.state.modalInfo.sprites.other.dream_world.front_default as string)
                 : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${this.state.modalInfo.id}.svg`
             }
+            onLoad={() => this.setState({ loaded: true })}
           />
         </StyledImageContainer>
         <StyledStatsContainer>
@@ -160,4 +175,11 @@ const IconContainer = styled.div`
   gap: 20px;
 `;
 
+const StyledImageSpiner = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 export default ModalInner;

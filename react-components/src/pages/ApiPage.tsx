@@ -1,3 +1,4 @@
+import { Spin } from 'antd';
 import { ApiCard, Modal, ModalInner, PageHero, Search } from 'components';
 import React, { Component } from 'react';
 import styled from 'styled-components';
@@ -18,7 +19,7 @@ interface ApiPageState {
 
 class ApiPage extends Component<ApiPageProps, ApiPageState> {
   defaultState: ApiPageState = {
-    modalView: true,
+    modalView: false,
     value: localStorage.getItem('searchValue') || '',
     resourceList: { count: 0, next: null, previous: null, results: [] },
     infoLink: '',
@@ -68,7 +69,7 @@ class ApiPage extends Component<ApiPageProps, ApiPageState> {
 
   render() {
     if (this.state.resourceList.count === 0) {
-      return <h3>Loading...</h3>;
+      return <Spin size="large" spinning={true} />;
     }
 
     return (
