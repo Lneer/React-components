@@ -100,14 +100,14 @@ type Stats = {
   stat: Stat;
 };
 
-type Type = {
+type PokemonType = {
   name: string;
   url: string;
 };
 
-type FullType = {
+export type FullType = {
   slot: number;
-  type: Type;
+  type: PokemonType;
 };
 
 export type PokemonInfo = {
@@ -126,6 +126,6 @@ export type PokemonInfo = {
   species: Species;
   sprites: Sprites;
   stats: Stats[];
-  type: FullType[];
+  types: FullType[];
   weight: number;
 };

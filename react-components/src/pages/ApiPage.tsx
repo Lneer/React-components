@@ -13,6 +13,7 @@ interface ApiPageState {
   modalView: boolean;
   value: string;
   resourceList: NamedAPIResourceList;
+  infoLink: string;
 }
 
 class ApiPage extends Component<ApiPageProps, ApiPageState> {
@@ -20,6 +21,7 @@ class ApiPage extends Component<ApiPageProps, ApiPageState> {
     modalView: true,
     value: localStorage.getItem('searchValue') || '',
     resourceList: { count: 0, next: null, previous: null, results: [] },
+    infoLink: '',
   };
 
   state = this.defaultState;
@@ -36,6 +38,32 @@ class ApiPage extends Component<ApiPageProps, ApiPageState> {
 
   filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {
     return elem.results.filter((pokemon) => pokemon.name.includes(this.state.value));
+  };
+
+  modalViewToggle = (event?: React.MouseEvent<HTMLImageElement>) => {
+    if (event) {
+      console.log(event.currentTarget.alt);
+    }
+    this.setState({ modalView: !this.state.modalView });
+  };
+
+  getCardInfo = (event?: React.MouseEvent<HTMLImageElement>) => {
+    if (!event) {
+      return;
+    }
+
+    const pokemonName = event.currentTarget.alt;
+    const pokemonIndex = this.state.resourceList.results.findIndex(
+      (elem) => elem.name === pokemonName
+    );
+
+    this.setState(
+      {
+        ...this.setState,
+        infoLink: this.state.resourceList.results[pokemonIndex].url,
+      },
+      () => console.log('state', this.state)
+    );
   };
 
   render() {
@@ -55,11 +83,15 @@ class ApiPage extends Component<ApiPageProps, ApiPageState> {
               key={pokemon.name}
               name={pokemon.name}
               img={imageUrlAdapter(pokemon.url)}
+              onClick={(event?: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+                this.getCardInfo(event);
+                this.modalViewToggle();
+              }}
             ></ApiCard>
           ))}
         </AlbumContainer>
-        <Modal visible={this.state.modalView}>
-          <ModalInner />
+        <Modal visible={this.state.modalView} onClose={this.modalViewToggle}>
+          <ModalInner link={this.state.infoLink} />
         </Modal>
       </>
     );

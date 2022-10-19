@@ -5,6 +5,7 @@ import pokeBall from '../assets/pokeBall.svg';
 interface ApiCardProps {
   name?: string;
   img?: string;
+  onClick?: (event?: React.MouseEvent<HTMLImageElement>) => void;
 }
 
 interface ApiCardState {
@@ -45,7 +46,12 @@ class ApiCard extends Component<ApiCardProps, ApiCardState> {
       <>
         <CardWrapper>
           <CardBody>
-            <CardImage src={this.props.img} alt={this.props.name} />
+            <CardImage
+              data-set={this.props.name}
+              src={this.props.img}
+              alt={this.props.name}
+              onClick={this.props.onClick}
+            />
             <DescriptionWrapper $isSelect={this.state.isSelected}>
               <Description $isSelect={false}>
                 {this.cardTitle()}
