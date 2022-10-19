@@ -5,3 +5,6 @@ export { default as Search } from './Search';
 export { default as PageHero } from './PageHero';
 export { default as Form } from './Form/Form';
 export { default as FormCard } from './FormCard';
+export { default as ApiCard } from './ApiCard';
+export { default as Modal } from './Modal';
+export { default as ModalInner } from './ModalInner';

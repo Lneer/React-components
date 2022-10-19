@@ -12,4 +12,7 @@
   --card-primary: #3f51b5;
 
   --error-primary: red;
+
+  --modal-background: rgba(0, 0, 0, 0.6);
+  --modal-border: #3f51b5;
 }

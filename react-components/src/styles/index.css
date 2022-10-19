@@ -1,4 +1,5 @@
 @import './colors.css';
+@import 'antd/dist/antd.css';
 
 *,
 * ::before,
