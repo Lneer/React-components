@@ -12,10 +12,10 @@ const Modal: React.FC<ModalProps> = ({ visible = false, children, onClose = () =
   return (
     <>
       {visible && (
-        <ModalContainer>
+        <ModalContainer data-testid="modal">
           <ModalOverlay onClick={onClose}></ModalOverlay>
           <ModalWindow>
-            <ButtonClose onClick={onClose} />
+            <ButtonClose onClick={onClose} data-testid="modalClose" />
             <ModalMessage>{children}</ModalMessage>
           </ModalWindow>
         </ModalContainer>

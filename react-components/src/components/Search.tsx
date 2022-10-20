@@ -56,12 +56,13 @@ class Search extends Component<SearchProps, SearchState> {
   }
 }
 
-const inputFulltWidth = css`
-  width: 30%;
+const InputFulltWidth = css`
+  width: 100%;
   padding-left: 2rem;
 `;
 
 const SearchBox = styled.div`
+  width: fit-content;
   height: 60%;
   display: flex;
   justify-content: center;
@@ -72,8 +73,7 @@ const SearchBox = styled.div`
   border-radius: 200px;
 
   &:hover > input {
-    padding-left: 2rem;
-    width: 30vw;
+    ${InputFulltWidth}
   }
 `;
 
@@ -85,7 +85,7 @@ const StyledInput = styled.input<{ $isEmpty: boolean }>`
   transition: 1s;
   background: none;
   outline: 0;
-  ${({ $isEmpty }) => ($isEmpty ? 'width: 0;' : inputFulltWidth)};
+  ${({ $isEmpty }) => ($isEmpty ? 'width: 0' : InputFulltWidth)};
 `;
 
 const Button = styled.button`

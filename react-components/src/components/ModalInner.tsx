@@ -44,7 +44,7 @@ class ModalInner extends Component<ModalInnerProps, ModalInnerState> {
   };
 
   capitalize = (str: string) => {
-    return str[0].toUpperCase + str.slice(1);
+    return str[0].toUpperCase() + str.slice(1);
   };
 
   render() {
@@ -53,12 +53,12 @@ class ModalInner extends Component<ModalInnerProps, ModalInnerState> {
     }
 
     return (
-      <StyledContainer>
+      <StyledContainer data-testid={this.state.modalInfo.name}>
         <StyledImageContainer>
           <StyledHeader>{this.capitalize(this.state.modalInfo.name)}</StyledHeader>
           {!this.state.loaded && (
             <StyledImageSpiner>
-              <Spin size="large" spinning={true} />
+              <Spin size="large" spinning={true} data-testid="spinner" />
             </StyledImageSpiner>
           )}
           <StyledImage
