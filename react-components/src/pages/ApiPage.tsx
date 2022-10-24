@@ -1,103 +1,94 @@
 import { Spin } from 'antd';
 import { ApiCard, Modal, ModalInner, PageHero, Search } from 'components';
-import React, { Component } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
 import { NamedAPIResourceList } from 'types/api/responseTypes';
 import { memoizedGetAPIResourceList } from 'utils/getAPIResourceList';
 import { imageUrlAdapter } from 'utils/imageUrlAdapter';
 
-interface ApiPageProps {
-  prop?: string;
-}
+const ApiPage: React.FC = () => {
+  const [resourceList, setResourceList] = useState<NamedAPIResourceList>({
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  });
+  const [infoLink, setInfoLink] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [isModal, setIsModal] = useState<boolean>(false);
 
-interface ApiPageState {
-  modalView: boolean;
-  value: string;
-  resourceList: NamedAPIResourceList;
-  infoLink: string;
-}
+  useEffect(() => {
+    let canceled = false;
+    memoizedGetAPIResourceList('https://pokeapi.co/api/v2/pokemon').then((resourceList) => {
+      if (!canceled) {
+        setResourceList(resourceList);
+      }
+    });
+    return () => {
+      console.log('request cancelled');
+      canceled = true;
+    };
+  }, []);
 
-class ApiPage extends Component<ApiPageProps, ApiPageState> {
-  defaultState: ApiPageState = {
-    modalView: false,
-    value: localStorage.getItem('searchValue') || '',
-    resourceList: { count: 0, next: null, previous: null, results: [] },
-    infoLink: '',
+  useLayoutEffect(() => {
+    setSearchValue(localStorage.getItem('searchValue') || '');
+    return () => {
+      localStorage.setItem('searchValue', searchValue);
+    };
+  }, []);
+
+  const filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {
+    return elem.results.filter((pokemon) => pokemon.name.includes(searchValue));
   };
 
-  state = this.defaultState;
-
-  componentDidMount() {
-    memoizedGetAPIResourceList('https://pokeapi.co/api/v2/pokemon').then((resourceList) =>
-      this.setState({ ...this.state, resourceList }, () => console.log(this.state))
-    );
-  }
-
-  getSearchState = (value: string) => {
-    this.setState({ value });
+  const modalViewToggle = () => {
+    setIsModal(!isModal);
   };
 
-  filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {
-    return elem.results.filter((pokemon) => pokemon.name.includes(this.state.value));
-  };
-
-  modalViewToggle = (event?: React.MouseEvent<HTMLImageElement>) => {
-    if (event) {
-      console.log(event.currentTarget.alt);
-    }
-    this.setState({ modalView: !this.state.modalView });
-  };
-
-  getCardInfo = (event?: React.MouseEvent<HTMLImageElement>) => {
+  const getCardInfo = (event?: React.MouseEvent<HTMLImageElement>) => {
     if (!event) {
       return;
     }
 
     const pokemonName = event.currentTarget.alt;
-    const pokemonIndex = this.state.resourceList.results.findIndex(
-      (elem) => elem.name === pokemonName
-    );
+    const pokemonIndex = resourceList.results.findIndex((elem) => elem.name === pokemonName);
 
-    this.setState(
-      {
-        ...this.setState,
-        infoLink: this.state.resourceList.results[pokemonIndex].url,
-      },
-      () => console.log('state', this.state)
-    );
+    setInfoLink(resourceList.results[pokemonIndex].url);
   };
 
-  render() {
-    if (this.state.resourceList.count === 0) {
-      return <Spin size="large" spinning={true} />;
-    }
+  const getSearchState = (value: string) => {
+    setSearchValue(value);
+  };
 
-    return (
-      <>
-        <PageHero label="Api" />
-        <SearchSection>
-          <Search onSearch={this.getSearchState} />
-        </SearchSection>
-        <AlbumContainer>
-          {this.filter(this.state.resourceList).map((pokemon) => (
-            <ApiCard
-              key={pokemon.name}
-              name={pokemon.name}
-              img={imageUrlAdapter(pokemon.url)}
-              onClick={(event?: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-                this.getCardInfo(event);
-                this.modalViewToggle();
-              }}
-            ></ApiCard>
-          ))}
-        </AlbumContainer>
-        <Modal visible={this.state.modalView} onClose={this.modalViewToggle}>
-          <ModalInner link={this.state.infoLink} />
-        </Modal>
-      </>
-    );
+  if (resourceList.count === 0) {
+    return <Spin size="large" spinning={true} />;
   }
-}
+
+  return (
+    <>
+      <PageHero label="Api" />
+      <SearchSection>
+        <Search onSearch={getSearchState} />
+      </SearchSection>
+      <AlbumContainer>
+        {filter(resourceList).map((pokemon) => (
+          <ApiCard
+            key={pokemon.name}
+            name={pokemon.name}
+            img={imageUrlAdapter(pokemon.url)}
+            onClick={(event?: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+              getCardInfo(event);
+              modalViewToggle();
+            }}
+          ></ApiCard>
+        ))}
+      </AlbumContainer>
+      <Modal visible={isModal} onClose={modalViewToggle}>
+        <ModalInner link={infoLink} />
+      </Modal>
+    </>
+  );
+};
 
 const SearchSection = styled.section`
   width: 100%;
