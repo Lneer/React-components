@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import pokeBall from '../assets/pokeBall.svg';
+import pokeBallImg from '../assets/pokeBall.svg';
 
 interface ApiCardProps {
   name?: string;
@@ -8,65 +8,51 @@ interface ApiCardProps {
   onClick?: (event?: React.MouseEvent<HTMLImageElement>) => void;
 }
 
-interface ApiCardState {
-  isSelected: boolean;
-}
+const ApiCard: React.FC<ApiCardProps> = ({ name, img, onClick = () => {} }) => {
+  const [isSelected, setIsSelected] = useState<boolean>(false);
 
-class ApiCard extends Component<ApiCardProps, ApiCardState> {
-  state = { isSelected: false };
-
-  setCardSelector = (): void => {
-    this.setState(() => {
-      return { isSelected: !this.state.isSelected };
-    });
+  const setCardSelector = (): void => {
+    setIsSelected((prev) => !prev);
   };
 
-  pokeBall = (): React.ReactNode => {
+  const pokeBall = (): React.ReactNode => {
     return (
-      <Button $isSelect={this.state.isSelected} onClick={this.setCardSelector}>
-        <img src={pokeBall} alt="pokeBall" />
+      <Button $isSelect={isSelected} onClick={setCardSelector}>
+        <img src={pokeBallImg} alt="pokeBall" />
       </Button>
     );
   };
 
-  cardTitle = (children?: React.ReactNode, isSelected = false): React.ReactNode => {
+  const cardTitle = (children?: React.ReactNode, isSelected = false): React.ReactNode => {
     return (
       <CardTitleContainer>
-        <CardTitle $isSelect={isSelected}>{this.props && this.props.name}</CardTitle>
+        <CardTitle $isSelect={isSelected}>{name && name}</CardTitle>
         <CardSubtitle>{children}</CardSubtitle>
       </CardTitleContainer>
     );
   };
 
-  render() {
-    if (!this.props) {
-      return null;
-    }
-    return (
-      <>
-        <CardWrapper>
-          <CardBody>
-            <CardImage
-              data-set={this.props.name}
-              src={this.props.img}
-              alt={this.props.name}
-              onClick={this.props.onClick}
-            />
-            <DescriptionWrapper $isSelect={this.state.isSelected}>
-              <Description $isSelect={false}>
-                {this.cardTitle()}
-                {this.pokeBall()}
-              </Description>
-              <Description $isSelect={true}>
-                {this.cardTitle(<p>Has been choosen</p>, true)}
-              </Description>
-            </DescriptionWrapper>
-          </CardBody>
-        </CardWrapper>
-      </>
-    );
+  if (!(name && img)) {
+    return null;
   }
-}
+
+  return (
+    <>
+      <CardWrapper>
+        <CardBody>
+          <CardImage data-set={name} src={img} alt={name} onClick={onClick} />
+          <DescriptionWrapper $isSelect={isSelected}>
+            <Description $isSelect={false}>
+              {cardTitle()}
+              {pokeBall()}
+            </Description>
+            <Description $isSelect={true}>{cardTitle(<p>Has been choosen</p>, true)}</Description>
+          </DescriptionWrapper>
+        </CardBody>
+      </CardWrapper>
+    </>
+  );
+};
 
 const CardBody = styled.div`
   width: 100%;

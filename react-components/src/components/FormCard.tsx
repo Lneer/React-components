@@ -1,5 +1,5 @@
 import { hobbyIcon } from 'assets/hobbyIcons';
-import React, { Component } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import { UserData } from 'types/form/userData';
 
@@ -7,59 +7,56 @@ interface FormCardProps {
   userData?: UserData;
 }
 
-class FormCard extends Component<FormCardProps> {
-  render() {
-    return (
-      <Wrapper data-testid="formCard">
-        <StyledFormCard>
-          <Header src="./images/cardHeader.png" alt="header" />
-          <CardContent>
+const FormCard: React.FC<FormCardProps> = ({ userData }) => {
+  return (
+    <Wrapper data-testid="formCard">
+      <StyledFormCard>
+        <Header src="./images/cardHeader.png" alt="header" />
+        <CardContent>
+          <div>
+            <UserImageContaiter>
+              <ImageWrapper>
+                <UserImage src={userData?.img} alt="logo" />
+              </ImageWrapper>
+            </UserImageContaiter>
+          </div>
+          <UserInfo>
+            <p>
+              <span>Name: </span>
+              {userData?.name}
+            </p>
+            <p>
+              <span>NickName: </span>
+              {userData?.nick}
+            </p>
+            <p>
+              <span>Age: </span>
+              {userData?.age}
+            </p>
+            <p>
+              <span>Sex: </span>
+              {userData?.gender}
+            </p>
             <div>
-              <UserImageContaiter>
-                <ImageWrapper>
-                  <UserImage src={this.props.userData?.img} alt="logo" />
-                </ImageWrapper>
-              </UserImageContaiter>
+              <span>Hobby:</span>
+              <HobbyWrapper>
+                {userData?.hobby.map((hobby) => {
+                  return (
+                    <span key={hobby}>
+                      <img src={hobbyIcon[hobby as keyof typeof hobbyIcon]} alt={hobby} />
+                    </span>
+                  );
+                })}
+              </HobbyWrapper>
             </div>
-            <UserInfo>
-              <p>
-                <span>Name: </span>
-                {this.props.userData?.name}
-              </p>
-              <p>
-                <span>NickName: </span>
-                {this.props.userData?.nick}
-              </p>
-              <p>
-                <span>Age: </span>
-                {this.props.userData?.age}
-              </p>
-              <p>
-                <span>Sex: </span>
-                {this.props.userData?.gender}
-              </p>
-
-              <div>
-                <span>Hobby:</span>
-                <HobbyWrapper>
-                  {this.props.userData?.hobby.map((hobby) => {
-                    return (
-                      <span key={hobby}>
-                        <img src={hobbyIcon[hobby as keyof typeof hobbyIcon]} alt={hobby} />
-                      </span>
-                    );
-                  })}
-                </HobbyWrapper>
-              </div>
-            </UserInfo>
-          </CardContent>
-          <MapImage src="./images/map.png" alt="map" />
-          <Footer src="./images/cardFooter.png" alt="footer" />
-        </StyledFormCard>
-      </Wrapper>
-    );
-  }
-}
+          </UserInfo>
+        </CardContent>
+        <MapImage src="./images/map.png" alt="map" />
+        <Footer src="./images/cardFooter.png" alt="footer" />
+      </StyledFormCard>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   margin: 0 auto;

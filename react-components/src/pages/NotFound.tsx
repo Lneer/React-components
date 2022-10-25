@@ -1,10 +1,9 @@
 import { PageHero } from 'components';
-import React, { Component } from 'react';
 
-class NotFoundPage extends Component {
-  render() {
-    return <PageHero label="Page not found" />;
-  }
-}
+import React from 'react';
+
+const NotFoundPage: React.FC = () => {
+  return <PageHero label="Page not found" />;
+};
 
 export default NotFoundPage;

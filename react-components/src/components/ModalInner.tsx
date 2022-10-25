@@ -1,5 +1,5 @@
 import { Spin } from 'antd';
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FullType, PokemonInfo } from 'types/api/responseTypes';
 import { Type } from 'types/pokemon';
@@ -10,30 +10,19 @@ interface ModalInnerProps {
   link?: string;
 }
 
-interface ModalInnerState {
-  modalInfo: PokemonInfo | null;
-  loaded: boolean;
-}
+const ModalInner: React.FC<ModalInnerProps> = ({ link }) => {
+  const [info, setInfo] = useState<PokemonInfo | null>(null);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
-class ModalInner extends Component<ModalInnerProps, ModalInnerState> {
-  state: ModalInnerState = { modalInfo: null, loaded: false };
-  pokemon = this.state.modalInfo;
-
-  componentDidMount() {
-    if (!this.props.link) {
-      this.setState({ modalInfo: null }, () => console.log('null'));
+  useEffect(() => {
+    if (!link) {
+      setInfo(null);
     }
 
-    memoizedGetAPIResourceList(this.props.link as string).then((modalInfo) =>
-      this.setState({ ...this.state, modalInfo }, () => (this.pokemon = this.state.modalInfo))
-    );
-  }
+    memoizedGetAPIResourceList(link as string).then((modalInfo) => setInfo(modalInfo));
+  }, [link]);
 
-  componentWillUnmount(): void {
-    this.setState({ modalInfo: null });
-  }
-
-  mapping = (array: FullType[]) => {
+  const typeMapping = (array: FullType[]) => {
     return array.map((type) => (
       <TypeIcon
         key={type.type.name}
@@ -43,63 +32,65 @@ class ModalInner extends Component<ModalInnerProps, ModalInnerState> {
     ));
   };
 
-  capitalize = (str: string) => {
+  const capitalize = (str: string) => {
     return str[0].toUpperCase() + str.slice(1);
   };
 
-  render() {
-    if (!this.state.modalInfo) {
-      return <Spin size="large" spinning={true} />;
-    }
-
-    return (
-      <StyledContainer data-testid={this.state.modalInfo.name}>
-        <StyledImageContainer>
-          <StyledHeader>{this.capitalize(this.state.modalInfo.name)}</StyledHeader>
-          {!this.state.loaded && (
-            <StyledImageSpiner>
-              <Spin size="large" spinning={true} data-testid="spinner" />
-            </StyledImageSpiner>
-          )}
-          <StyledImage
-            src={
-              (this.state.modalInfo.sprites.other.dream_world.front_default as string)
-                ? (this.state.modalInfo.sprites.other.dream_world.front_default as string)
-                : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${this.state.modalInfo.id}.svg`
-            }
-            onLoad={() => this.setState({ loaded: true })}
-          />
-        </StyledImageContainer>
-        <StyledStatsContainer>
-          <StyledListItem>
-            <h3>Dex Number :</h3>
-            <h4>{this.state.modalInfo.id}</h4>
-          </StyledListItem>
-          {this.state.modalInfo.stats.map((stat) => (
-            <StyledListItem key={stat.stat.name.toUpperCase()}>
-              <h3>{stat.stat.name} : </h3>
-              <h4>{stat.base_stat}</h4>
-            </StyledListItem>
-          ))}
-          <StyledListItem>
-            <h3>Height :</h3>
-            <h4>{this.state.modalInfo.height}</h4>
-          </StyledListItem>
-          <StyledListItem>
-            <h3>Weight :</h3>
-            <h4>{this.state.modalInfo.weight}</h4>
-          </StyledListItem>
-          <StyledListItem>
-            <>
-              <h3>Type :</h3>
-              <IconContainer>{this.mapping(this.state.modalInfo.types)}</IconContainer>
-            </>
-          </StyledListItem>
-        </StyledStatsContainer>
-      </StyledContainer>
-    );
+  if (!info) {
+    return <Spin size="large" spinning={true} />;
   }
-}
+
+  return (
+    <StyledContainer data-testid={info.name}>
+      <StyledImageContainer>
+        <StyledHeader>{capitalize(info.name)}</StyledHeader>
+        {!loaded && (
+          <StyledImageSpiner>
+            <Spin size="large" spinning={true} data-testid="spinner" />
+          </StyledImageSpiner>
+        )}
+        <StyledImage
+          src={
+            (info.sprites.other.dream_world.front_default as string)
+              ? (info.sprites.other.dream_world.front_default as string)
+              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${info.id}.svg`
+          }
+          onLoad={() => setLoaded(true)}
+        />
+      </StyledImageContainer>
+      <StyledStatsContainer>
+        <StyledListItem>
+          <h3>Dex Number :</h3>
+          <h4>{info.id}</h4>
+        </StyledListItem>
+
+        {info.stats.map((stat) => (
+          <StyledListItem key={stat.stat.name.toUpperCase()}>
+            <h3>{stat.stat.name} : </h3>
+            <h4>{stat.base_stat}</h4>
+          </StyledListItem>
+        ))}
+
+        <StyledListItem>
+          <h3>Height :</h3>
+          <h4>{info.height}</h4>
+        </StyledListItem>
+
+        <StyledListItem>
+          <h3>Weight :</h3>
+          <h4>{info.weight}</h4>
+        </StyledListItem>
+
+        <StyledListItem>
+          <>
+            <h3>Type :</h3>
+            <IconContainer>{typeMapping(info.types)}</IconContainer>
+          </>
+        </StyledListItem>
+      </StyledStatsContainer>
+    </StyledContainer>
+  );
+};
 
 const StyledContainer = styled.div`
   display: grid;
