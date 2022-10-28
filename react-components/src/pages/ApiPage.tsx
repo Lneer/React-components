@@ -32,9 +32,6 @@ const ApiPage: React.FC = () => {
 
   useLayoutEffect(() => {
     setSearchValue(localStorage.getItem('searchValue') || '');
-    return () => {
-      localStorage.setItem('searchValue', searchValue);
-    };
   }, []);
 
   const filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {

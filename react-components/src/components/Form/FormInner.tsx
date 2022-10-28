@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { SubmitContext } from '../../context/SubmitContext';
 
 interface FormInnerProps {
   type?: string;
   label?: string;
-  reference?: React.RefObject<HTMLInputElement | HTMLSelectElement>;
-  isRequired?: boolean;
+  reference?: React.MutableRefObject<HTMLInputElement | HTMLSelectElement | undefined>;
   name?: string;
   valid?: boolean;
   errormassege?: string;
@@ -14,86 +13,71 @@ interface FormInnerProps {
   testId?: string;
 }
 
-class FormInner extends Component<FormInnerProps> {
-  static contextType = SubmitContext;
+const FormInner: React.FC<FormInnerProps> = (props) => {
+  const { type = 'text', label, reference, name, valid, errormassege, children, testId } = props;
 
-  render() {
-    if (this.props.type === 'select') {
-      return (
-        <SubmitContext.Consumer>
-          {(onChange) => (
-            <label>
-              <h3>{this.props.label}</h3>
-              <StyledSelect
-                name={this.props.name}
-                defaultValue="default"
-                data-testid={this.props.testId}
-                ref={this.props.reference as React.RefObject<HTMLSelectElement>}
-                $vaild={!!this.props.valid}
-                onChange={(e) => {
-                  if (this.props.reference?.current) {
-                    this.props.reference.current.value = e.target.value;
-                    onChange(e);
-                  }
-                }}
-              >
-                {this.props.children}
-              </StyledSelect>
-              <StyledErrorMessege $vaild={!!this.props.valid}>
-                {this.props.errormassege}
-              </StyledErrorMessege>
-            </label>
-          )}
-        </SubmitContext.Consumer>
-      );
-    }
+  const onChange = useContext(SubmitContext);
 
-    if (this.props.type === 'switch') {
-      return (
-        <SubmitContext.Consumer>
-          {(onChange) => (
-            <label>
-              <h3>{this.props.label}</h3>
-              <SwitchInput
-                name={this.props.name}
-                type="checkbox"
-                id="switch"
-                ref={this.props.reference as React.RefObject<HTMLInputElement>}
-                onChange={onChange}
-                data-testid={this.props.testId}
-              />
-              <SwitchLabel htmlFor="switch" />
-              <StyledErrorMessege $vaild={!!this.props.valid}>
-                {this.props.errormassege}
-              </StyledErrorMessege>
-            </label>
-          )}
-        </SubmitContext.Consumer>
-      );
-    }
+  if (type === 'select') {
     return (
-      <SubmitContext.Consumer>
-        {(onChange) => (
-          <label>
-            <h3>{this.props.label}</h3>
-            <StyledInputWrapper $vaild={!!this.props.valid}>
-              <StyledInput
-                name={this.props.name}
-                type={this.props.type ? this.props.type : 'text'}
-                ref={this.props.reference as React.RefObject<HTMLInputElement>}
-                onChange={onChange}
-                data-testid={this.props.testId}
-              />
-            </StyledInputWrapper>
-            <StyledErrorMessege $vaild={!!this.props.valid}>
-              {this.props.errormassege}
-            </StyledErrorMessege>
-          </label>
-        )}
-      </SubmitContext.Consumer>
+      <label>
+        <h3>{label}</h3>
+        <StyledSelect
+          name={name}
+          defaultValue="default"
+          data-testid={testId}
+          ref={reference as React.RefObject<HTMLSelectElement>}
+          $vaild={!!valid}
+          onChange={(e) => {
+            if (reference?.current) {
+              reference.current.value = e.target.value;
+              onChange(e);
+            }
+          }}
+        >
+          {children}
+        </StyledSelect>
+        <StyledErrorMessege $vaild={!!valid}>{errormassege}</StyledErrorMessege>
+      </label>
     );
   }
-}
+
+  if (type === 'switch') {
+    return (
+      <label>
+        <h3>{label}</h3>
+        <SwitchInput
+          name={name}
+          type="checkbox"
+          id="switch"
+          ref={reference as React.RefObject<HTMLInputElement>}
+          onChange={onChange}
+          data-testid={testId}
+        />
+        <SwitchLabel htmlFor="switch" />
+        <StyledErrorMessege $vaild={!!valid}>{errormassege}</StyledErrorMessege>
+      </label>
+    );
+  }
+
+  return (
+    <label>
+      <h3>{label}</h3>
+      <StyledInputWrapper $vaild={!!valid}>
+        <StyledInput
+          name={name}
+          type={type}
+          ref={reference as React.RefObject<HTMLInputElement>}
+          onChange={onChange}
+          data-testid={testId}
+        />
+      </StyledInputWrapper>
+      <StyledErrorMessege data-testid={`${testId}-err`} $vaild={!!valid}>
+        {errormassege}
+      </StyledErrorMessege>
+    </label>
+  );
+};
 
 const borderMode = css<{ $vaild: boolean }>`
   border: ${({ $vaild }) => ($vaild ? '3px solid #7c6c4e' : '3px solid var(--error-primary)')};

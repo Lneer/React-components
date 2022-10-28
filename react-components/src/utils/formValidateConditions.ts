@@ -1,5 +1,5 @@
 export const validateConditions = (
-  checkingRef: React.RefObject<HTMLInputElement | HTMLSelectElement>
+  checkingRef: React.MutableRefObject<HTMLInputElement | HTMLSelectElement | undefined>
 ): boolean => {
   if (!checkingRef.current) {
     return false;

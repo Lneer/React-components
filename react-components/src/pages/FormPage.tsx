@@ -15,10 +15,10 @@ const FormPage: React.FC = () => {
   return (
     <>
       <PageHero label="Form"></PageHero>
-      <Form sendCard={(data) => getFormData(data)}></Form>
+      <Form sendCard={(data) => getFormData(data)} />
       <StyledCardWrapper>
         {userData.map((data) => (
-          <FormCard userData={data} key={`${data.name}_${data.nick}`}></FormCard>
+          <FormCard userData={data} key={`${data.name}_${data.nick}`} />
         ))}
       </StyledCardWrapper>
     </>

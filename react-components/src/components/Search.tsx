@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import pokeBall from '../assets/pokeBall.svg';
 import styled, { css } from 'styled-components';
 
@@ -8,25 +8,27 @@ interface SearchProps {
 
 const Search: React.FC<SearchProps> = ({ onSearch = () => {} }) => {
   const [searchValue, setSearchValue] = useState<string>('');
-  const input = useRef<HTMLInputElement>(null);
+  const input = useRef<string>('');
 
-  useLayoutEffect(() => {
-    setSearchValue(localStorage.getItem(searchValue) || '');
-    return () => {
-      localStorage.setItem('searchValue', searchValue);
-    };
+  useEffect(() => {
+    setSearchValue(localStorage.getItem('searchValue') || '');
+  }, []);
+
+  useEffect(() => {
+    return localStorage.setItem('searchValue', searchValue);
   }, [searchValue]);
 
   const stateManager = (state: string | null) => {
-    if (!state) return;
-    setSearchValue(state);
-    onSearch(state);
+    if (state !== null) {
+      input.current = state;
+      setSearchValue(state);
+      onSearch(state);
+    }
   };
 
   return (
     <SearchBox>
       <StyledInput
-        ref={input}
         $isEmpty={!searchValue}
         type="text"
         placeholder="search"
@@ -41,52 +43,6 @@ const Search: React.FC<SearchProps> = ({ onSearch = () => {} }) => {
     </SearchBox>
   );
 };
-
-// class Search extends Component<SearchProps, SearchState> {
-//   state = { searchValue: '' };
-
-//   stateManager(state: string) {
-//     this.setState({
-//       searchValue: state,
-//     });
-//     this.props.onSearch(state);
-//   }
-
-//   componentDidMount(): void {
-//     const searchValue = localStorage.getItem('searchValue');
-
-//     if (searchValue) {
-//       this.setState({ searchValue });
-//     }
-//   }
-
-//   componentDidUpdate(): void {
-//     localStorage.setItem('searchValue', this.state.searchValue);
-//   }
-
-//   componentWillUnmount(): void {
-//     localStorage.setItem('searchValue', this.state.searchValue);
-//   }
-
-//   render() {
-//     return (
-//       <SearchBox>
-//         <StyledInput
-//           $isEmpty={!this.state.searchValue}
-//           type="text"
-//           placeholder="search"
-//           value={this.state.searchValue}
-//           onChange={(event) => {
-//             this.stateManager(event.target.value);
-//           }}
-//         />
-//         <Button onClick={() => this.stateManager('')}>
-//           <img src={pokeBall} alt="pokeBall" />
-//         </Button>
-//       </SearchBox>
-//     );
-//   }
-// }
 
 const InputFulltWidth = css`
   width: 100%;
