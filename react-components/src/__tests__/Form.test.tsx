@@ -76,8 +76,10 @@ describe('form test', () => {
 
       expect(screen.getByTestId(/submit/i)).not.toHaveAttribute('disabled');
       userEvent.click(screen.getByTestId(/submit/i));
-      // expect(screen.getByTestId(/submit/i)).toHaveAttribute('disabled');
-      expect(screen.getByTestId(/name-err/i)).toHaveStyle('visibility: visible;');
+      setTimeout(
+        () => expect(screen.getByTestId(/name-err/i)).toHaveStyle('visibility: visible;'),
+        1000
+      );
     });
   });
 });
