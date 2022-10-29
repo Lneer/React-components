@@ -8,9 +8,9 @@ describe('Routing tests', () => {
   it('Basic navigation', async () => {
     render(<App />, { wrapper: BrowserRouter });
 
-    expect(screen.getByText(/main page/i)).toBeInTheDocument();
+    expect(await screen.findByText(/main page/i)).toBeInTheDocument();
 
-    await userEvent.click(screen.getByText(/about/i));
+    userEvent.click(screen.getByText(/about/i));
     expect(screen.getByText(/about page/i)).toBeInTheDocument();
   });
 

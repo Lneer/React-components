@@ -1,7 +1,7 @@
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import { Modal, ModalInner } from '../components';
-import { ApiPage } from 'pages';
+import { MainPage } from 'pages';
 import userEvent from '@testing-library/user-event';
 
 beforeEach(() => {
@@ -41,7 +41,7 @@ describe('Modal tests', () => {
   });
 
   it('renderPage', async () => {
-    render(<ApiPage />);
+    render(<MainPage />);
     const bulbasaur = await screen.findAllByRole('heading', { name: 'bulbasaur' });
     const rattata = await screen.findAllByRole('heading', { name: 'rattata' });
 
