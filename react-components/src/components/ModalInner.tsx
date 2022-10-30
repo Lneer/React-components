@@ -1,9 +1,10 @@
-import { Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Spin } from 'antd';
 import styled from 'styled-components';
+import { memoizedGetAPIResourceList } from 'utils/getAPIResourceList';
+import { capitalize, getImageSrc } from 'utils';
 import { FullType, PokemonInfo } from 'types/api/responseTypes';
 import { Type } from 'types/pokemon';
-import { memoizedGetAPIResourceList } from 'utils/getAPIResourceList';
 import { TypeIcons } from '../assets/pokemon-type-icons';
 
 interface ModalInnerProps {
@@ -22,20 +23,6 @@ const ModalInner: React.FC<ModalInnerProps> = ({ link }) => {
     memoizedGetAPIResourceList(link as string).then((modalInfo) => setInfo(modalInfo));
   }, [link]);
 
-  const typeMapping = (array: FullType[]) => {
-    return array.map((type) => (
-      <TypeIcon
-        key={type.type.name}
-        src={TypeIcons[type.type.name as Type]}
-        title={type.type.name}
-      />
-    ));
-  };
-
-  const capitalize = (str: string) => {
-    return str[0].toUpperCase() + str.slice(1);
-  };
-
   if (!info) {
     return <Spin size="large" spinning={true} />;
   }
@@ -49,14 +36,7 @@ const ModalInner: React.FC<ModalInnerProps> = ({ link }) => {
             <Spin size="large" spinning={true} data-testid="spinner" />
           </StyledImageSpiner>
         )}
-        <StyledImage
-          src={
-            (info.sprites.other.dream_world.front_default as string)
-              ? (info.sprites.other.dream_world.front_default as string)
-              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${info.id}.svg`
-          }
-          onLoad={() => setLoaded(true)}
-        />
+        <StyledImage src={getImageSrc(info)} onLoad={() => setLoaded(true)} />
       </StyledImageContainer>
       <StyledStatsContainer>
         <StyledListItem>
@@ -82,13 +62,33 @@ const ModalInner: React.FC<ModalInnerProps> = ({ link }) => {
         </StyledListItem>
 
         <StyledListItem>
-          <>
-            <h3>Type :</h3>
-            <IconContainer>{typeMapping(info.types)}</IconContainer>
-          </>
+          <h3>Type :</h3>
+          <PokemonTypes types={info.types} />
         </StyledListItem>
       </StyledStatsContainer>
     </StyledContainer>
+  );
+};
+
+interface PokemonTypesProps {
+  types?: FullType[];
+}
+
+const PokemonTypes: React.FC<PokemonTypesProps> = ({ types }) => {
+  if (!types) {
+    return null;
+  }
+
+  return (
+    <IconContainer>
+      {types.map((type) => (
+        <TypeIcon
+          key={type.type.name}
+          src={TypeIcons[type.type.name as Type]}
+          title={type.type.name}
+        />
+      ))}
+    </IconContainer>
   );
 };
 
@@ -145,12 +145,13 @@ const StyledStatsContainer = styled.ul`
 `;
 
 const StyledListItem = styled.li`
-display:grid;
-grid-template-columns: 4fr 1fr;
-align-items:center;
-height:10%;
-padding 0 10px;
-gap:10px;`;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  align-items: center;
+  height: 10%;
+  padding: 0 10px;
+  gap: 10px;
+`;
 
 const TypeIcon = styled.img`
   display: inline-block;

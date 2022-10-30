@@ -7,22 +7,12 @@ interface CardPropertyProps {
 }
 
 const CardProperty: React.FC<CardPropertyProps> = ({ pokemon }) => {
-  const statParser = (obj: Stats) => {
-    const keys = Object.keys(obj);
-    return keys.map((stat, index) => (
-      <p key={index}>
-        <strong>{stat}:</strong>
-        {` ${obj[stat as keyof typeof obj]}`}
-      </p>
-    ));
-  };
-
   if (!pokemon) return <PropertyContainer />;
 
   return (
     <PropertyContainer>
       <Properties>
-        {statParser(pokemon.stats)}
+        <StatView stats={pokemon.stats} />
         <BasicStats>
           <span>
             <strong>height:</strong> {pokemon.height}
@@ -36,6 +26,28 @@ const CardProperty: React.FC<CardPropertyProps> = ({ pokemon }) => {
         </BasicStats>
       </Properties>
     </PropertyContainer>
+  );
+};
+
+interface StatViewProps {
+  stats?: Stats;
+}
+const StatView: React.FC<StatViewProps> = ({ stats }) => {
+  if (!stats) {
+    return null;
+  }
+
+  const keys = Object.keys(stats);
+
+  return (
+    <>
+      {keys.map((stat, index) => (
+        <p key={index}>
+          <strong>{stat}:</strong>
+          {` ${stats[stat as keyof typeof stats]}`}
+        </p>
+      ))}
+    </>
   );
 };
 
