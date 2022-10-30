@@ -1,4 +1,4 @@
-import { Spin } from 'antd';
+import { Spin, Pagination } from 'antd';
 import { ApiCard, Modal, ModalInner, PageHero, Search } from 'components';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -16,24 +16,36 @@ const MainPage: React.FC = () => {
   const [infoLink, setInfoLink] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [url, setUrl] = useState<string>('https://pokeapi.co/api/v2/pokemon');
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
-    let canceled = false;
-    memoizedGetAPIResourceList('https://pokeapi.co/api/v2/pokemon').then((resourceList) => {
-      if (!canceled) {
-        setResourceList(resourceList);
-      }
-    });
-    return () => {
-      console.log('request cancelled');
-      canceled = true;
-    };
-  }, []);
+    apiLoader(url);
+  }, [url]);
 
   useLayoutEffect(() => {
     setSearchValue(localStorage.getItem('searchValue') || '');
   }, []);
 
+  const apiLoader = (url: string) => {
+    memoizedGetAPIResourceList(url).then((resourceList) => {
+      setResourceList(resourceList);
+    });
+  };
+
+  const changeHandler = (page: number) => {
+    if (page > currentPage) {
+      if (resourceList.next) {
+        setUrl(resourceList.next);
+      }
+    }
+    if (page < currentPage) {
+      if (resourceList.previous) {
+        setUrl(resourceList.previous);
+      }
+    }
+    setCurrentPage(page);
+  };
   const filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {
     return elem.results.filter((pokemon) => pokemon.name.includes(searchValue));
   };
@@ -53,10 +65,6 @@ const MainPage: React.FC = () => {
     setInfoLink(resourceList.results[pokemonIndex].url);
   };
 
-  const getSearchState = (value: string) => {
-    setSearchValue(value);
-  };
-
   if (resourceList.count === 0) {
     return <Spin size="large" spinning={true} />;
   }
@@ -65,7 +73,7 @@ const MainPage: React.FC = () => {
     <>
       <PageHero label="Main Page" />
       <SearchSection>
-        <Search onSearch={getSearchState} />
+        <Search onSearch={setSearchValue} />
       </SearchSection>
       <AlbumContainer>
         {filter(resourceList).map((pokemon) => (
@@ -80,6 +88,7 @@ const MainPage: React.FC = () => {
           ></ApiCard>
         ))}
       </AlbumContainer>
+      <StyledPagination total={resourceList.count} pageSize={20} onChange={changeHandler} />
       <Modal visible={isModal} onClose={modalViewToggle}>
         <ModalInner link={infoLink} />
       </Modal>
@@ -100,5 +109,12 @@ const AlbumContainer = styled.section`
   justify-content: space-between;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-auto-flow: dense;
+`;
+
+const StyledPagination = styled(Pagination)`
+  display flex;
+  justify-content:center;
+  transform: scale(1.4);
+  margin: 50px auto;
 `;
 export default MainPage;
