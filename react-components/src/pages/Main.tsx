@@ -16,8 +16,9 @@ const MainPage: React.FC = () => {
   const [infoLink, setInfoLink] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [url, setUrl] = useState<string>('https://pokeapi.co/api/v2/pokemon');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(20);
+  const [url, setUrl] = useState<string>(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=0`);
 
   useEffect(() => {
     apiLoader(url);
@@ -34,17 +35,7 @@ const MainPage: React.FC = () => {
   };
 
   const changeHandler = (page: number) => {
-    if (page > currentPage) {
-      if (resourceList.next) {
-        setUrl(resourceList.next);
-      }
-    }
-    if (page < currentPage) {
-      if (resourceList.previous) {
-        setUrl(resourceList.previous);
-      }
-    }
-    setCurrentPage(page);
+    setUrl(`https://pokeapi.co/api/v2/pokemon?limit=${pageSize}&offset=${pageSize * (page - 1)}`);
   };
   const filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {
     return elem.results.filter((pokemon) => pokemon.name.includes(searchValue));
@@ -84,6 +75,10 @@ const MainPage: React.FC = () => {
             onClick={(event?: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
               getCardInfo(event);
               modalViewToggle();
+            }}
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = './logo512.png';
             }}
           ></ApiCard>
         ))}

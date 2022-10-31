@@ -6,9 +6,10 @@ interface ApiCardProps {
   name?: string;
   img?: string;
   onClick?: (event?: React.MouseEvent<HTMLImageElement>) => void;
+  onError?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
 }
 
-const ApiCard: React.FC<ApiCardProps> = ({ name, img, onClick = () => {} }) => {
+const ApiCard: React.FC<ApiCardProps> = ({ name, img, onClick = () => {}, onError = () => {} }) => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   const setCardSelector = (): void => {
@@ -40,7 +41,7 @@ const ApiCard: React.FC<ApiCardProps> = ({ name, img, onClick = () => {} }) => {
     <>
       <CardWrapper>
         <CardBody>
-          <CardImage data-set={name} src={img} alt={name} onClick={onClick} />
+          <CardImage data-set={name} src={img} alt={name} onClick={onClick} onError={onError} />
           <DescriptionWrapper $isSelect={isSelected}>
             <Description $isSelect={false}>
               {cardTitle()}

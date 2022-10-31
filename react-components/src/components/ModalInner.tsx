@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
 import styled from 'styled-components';
 import { memoizedGetAPIResourceList } from 'utils/getAPIResourceList';
-import { capitalize, getImageSrc } from 'utils';
+import { capitalize, getAltImageSrc, getImageSrc } from 'utils';
 import { FullType, PokemonInfo } from 'types/api/responseTypes';
 import { Type } from 'types/pokemon';
 import { TypeIcons } from '../assets/pokemon-type-icons';
@@ -36,7 +36,14 @@ const ModalInner: React.FC<ModalInnerProps> = ({ link }) => {
             <Spin size="large" spinning={true} data-testid="spinner" />
           </StyledImageSpiner>
         )}
-        <StyledImage src={getImageSrc(info)} onLoad={() => setLoaded(true)} />
+        <StyledImage
+          src={getImageSrc(info)}
+          onLoad={() => setLoaded(true)}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = getAltImageSrc(info);
+          }}
+        />
       </StyledImageContainer>
       <StyledStatsContainer>
         <StyledListItem>
