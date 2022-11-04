@@ -1,24 +1,32 @@
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { Spin, Pagination } from 'antd';
 import { ApiCard, Modal, ModalInner, PageHero, Search } from 'components';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { ContextApp } from 'context/Store';
 import styled from 'styled-components';
 import { NamedAPIResourceList } from 'types/api/responseTypes';
 import { memoizedGetAPIResourceList } from 'utils/getAPIResourceList';
 import { imageUrlAdapter } from 'utils/imageUrlAdapter';
+import { Types } from 'redusers/reduser';
 
 const MainPage: React.FC = () => {
+  const context = useContext(ContextApp);
+  const { state } = context;
+
   const [resourceList, setResourceList] = useState<NamedAPIResourceList>({
     count: 0,
     next: null,
     previous: null,
     results: [],
   });
+
   const [infoLink, setInfoLink] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(20);
-  const [url, setUrl] = useState<string>(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=0`);
+  const [url, setUrl] = useState<string>(
+    `https://pokeapi.co/api/v2/pokemon?limit=${state.pageSize}&offset=${
+      state.pageSize * (state.page - 1)
+    }`
+  );
 
   useEffect(() => {
     apiLoader(url);
@@ -34,9 +42,19 @@ const MainPage: React.FC = () => {
     });
   };
 
-  const changeHandler = (page: number) => {
+  const changeHandler = (page: number, pageSize: number) => {
     setUrl(`https://pokeapi.co/api/v2/pokemon?limit=${pageSize}&offset=${pageSize * (page - 1)}`);
+    context.dispatch({
+      type: 'SET_PAGE' as Types.SetPage,
+      payload: { page },
+    });
+
+    context.dispatch({
+      type: 'SET_PAGE_SIZE' as Types.SetPageSize,
+      payload: { pageSize },
+    });
   };
+
   const filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {
     return elem.results.filter((pokemon) => pokemon.name.includes(searchValue));
   };
@@ -83,7 +101,14 @@ const MainPage: React.FC = () => {
           ></ApiCard>
         ))}
       </AlbumContainer>
-      <StyledPagination total={resourceList.count} pageSize={20} onChange={changeHandler} />
+      <StyledPagination
+        total={resourceList.count}
+        onChange={changeHandler}
+        defaultPageSize={state.pageSize}
+        defaultCurrent={state.page}
+        pageSizeOptions={['20', '50', '100']}
+      />
+
       <Modal visible={isModal} onClose={modalViewToggle}>
         <ModalInner link={infoLink} />
       </Modal>
@@ -107,9 +132,14 @@ const AlbumContainer = styled.section`
 `;
 
 const StyledPagination = styled(Pagination)`
-  display flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
   transform: scale(1.4);
-  margin: 50px auto;
+  margin: 50px 0;
+
+  & > li .ant-select-dropdown {
+    left: 0px !important;
+    top: calc(-7rem + 3px) !important;
+  }
 `;
 export default MainPage;
