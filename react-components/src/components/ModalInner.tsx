@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
 import styled from 'styled-components';
-import { memoizedGetAPIResourceList } from 'utils/getAPIResourceList';
-import { capitalize, getAltImageSrc, getImageSrc } from 'utils';
+import { capitalize, getAltImageSrc, getImageSrc, getAPIResourceList } from 'utils';
 import { FullType, PokemonInfo } from 'types/api/responseTypes';
 import { Type } from 'types/pokemon';
 import { TypeIcons } from '../assets/pokemon-type-icons';
@@ -20,7 +19,7 @@ const ModalInner: React.FC<ModalInnerProps> = ({ link }) => {
       setInfo(null);
     }
 
-    memoizedGetAPIResourceList(link as string).then((modalInfo) => setInfo(modalInfo));
+    getAPIResourceList(link as string).then((modalInfo) => setInfo(modalInfo));
   }, [link]);
 
   if (!info) {

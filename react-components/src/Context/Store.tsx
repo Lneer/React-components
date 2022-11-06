@@ -4,16 +4,15 @@ import { paginationReducer, StoreActions } from 'redusers/reduser';
 export interface StoreType {
   page: number;
   pageSize: number;
+  pokemonType: string;
 }
 
 const initialState = {
   page: 1,
   pageSize: 20,
+  pokemonType: '',
 };
 
-interface AppProviderProps {
-  children: React.ReactNode;
-}
 export const ContextApp = React.createContext<{
   state: StoreType;
   dispatch: Dispatch<StoreActions>;
@@ -21,6 +20,10 @@ export const ContextApp = React.createContext<{
   state: initialState,
   dispatch: () => null,
 });
+
+interface AppProviderProps {
+  children: React.ReactNode;
+}
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(paginationReducer, initialState);

@@ -122,6 +122,7 @@ const StyledSelect = styled.select<{ $vaild: boolean }>`
   background-color: #d4c7b5;
   ${borderMode}
 `;
+
 const SwitchInput = styled.input`
   height: 0;
   width: 0;

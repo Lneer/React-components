@@ -1,4 +1,4 @@
-type NamedAPIResource = {
+export type NamedAPIResource = {
   name: string;
   url: string;
 };
@@ -10,60 +10,26 @@ export type NamedAPIResourceList = {
   results: NamedAPIResource[];
 };
 
-type Ability = {
-  name: string;
-  url: string;
-};
-
 export type Abilities = {
-  ability: Ability[];
+  ability: NamedAPIResource[];
   is_hiden: boolean;
   slot: number;
 };
 
-type Form = {
-  name: string;
-  url: string;
-};
-type Version = {
-  name: string;
-  url: string;
-};
-
 type GameIndex = {
   game_index: number;
-  version: Version;
-};
-
-type Move = {
-  name: string;
-  url: string;
-};
-
-type VersionGroup = {
-  name: string;
-  url: string;
-};
-
-type MoveLarnMethod = {
-  name: string;
-  url: string;
+  version: NamedAPIResource;
 };
 
 type VersionGroupDetail = {
   level_learned_at: number;
-  move_learn_method: MoveLarnMethod;
-  version_group: VersionGroup;
+  move_learn_method: NamedAPIResource;
+  version_group: NamedAPIResource;
 };
 
 type Moves = {
-  move: Move;
+  move: NamedAPIResource;
   version_group_details: VersionGroupDetail[];
-};
-
-type Species = {
-  name: string;
-  url: string;
 };
 
 type OtherPokemontype = {
@@ -89,31 +55,29 @@ type Sprites = {
   versions: unknown;
 };
 
-type Stat = {
-  name: string;
-  url: string;
-};
-
 type Stats = {
   base_stat: number;
   effort: number;
-  stat: Stat;
-};
-
-type PokemonType = {
-  name: string;
-  url: string;
+  stat: NamedAPIResource;
 };
 
 export type FullType = {
   slot: number;
-  type: PokemonType;
+  type: NamedAPIResource;
 };
 
+export type SearchType = {
+  slot: number;
+  pokemon: NamedAPIResource;
+};
+export type TypeResponse = {
+  [key: string]: any;
+  pokemon: SearchType[]
+}
 export type PokemonInfo = {
   abilities: Abilities;
   base_experience: number;
-  forms: Form[];
+  forms: NamedAPIResource[];
   game_indices: GameIndex[];
   height: number;
   id: number;
@@ -123,7 +87,7 @@ export type PokemonInfo = {
   moves: Moves;
   name: string;
   order: string;
-  species: Species;
+  species: NamedAPIResource;
   sprites: Sprites;
   stats: Stats[];
   types: FullType[];

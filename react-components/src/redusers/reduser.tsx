@@ -3,6 +3,7 @@ import { StoreType } from 'context/Store';
 export enum Types {
   SetPage = 'SET_PAGE',
   SetPageSize = 'SET_PAGE_SIZE',
+  setPokemonType = 'SET_POKEMON_TYPE',
 }
 
 type ActionMap<M> = {
@@ -24,6 +25,10 @@ interface StorePayloads {
   [Types.SetPageSize]: {
     pageSize: number;
   };
+
+  [Types.setPokemonType]: {
+    pokemonType: string;
+  };
 }
 
 export type StoreActions = ActionMap<StorePayloads>[keyof ActionMap<StorePayloads>];
@@ -39,6 +44,11 @@ export const paginationReducer = (state: StoreType, action: StoreActions) => {
       return {
         ...state,
         pageSize: action.payload.pageSize,
+      };
+    case 'SET_POKEMON_TYPE':
+      return {
+        ...state,
+        pokemonType: action.payload.pokemonType,
       };
     default:
       return state;
