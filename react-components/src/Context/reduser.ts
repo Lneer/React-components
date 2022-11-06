@@ -1,10 +1,5 @@
-import { StoreType } from 'context/Store';
-
-export enum Types {
-  SetPage = 'SET_PAGE',
-  SetPageSize = 'SET_PAGE_SIZE',
-  setPokemonType = 'SET_POKEMON_TYPE',
-}
+import { Actions } from './actions';
+import { FormState, StoreType } from './constants';
 
 type ActionMap<M> = {
   [Key in keyof M]: M[Key] extends undefined
@@ -18,16 +13,20 @@ type ActionMap<M> = {
 };
 
 interface StorePayloads {
-  [Types.SetPage]: {
+  [Actions.SetPage]: {
     page: number;
   };
 
-  [Types.SetPageSize]: {
+  [Actions.SetPageSize]: {
     pageSize: number;
   };
 
-  [Types.setPokemonType]: {
+  [Actions.setPokemonType]: {
     pokemonType: string;
+  };
+
+  [Actions.setFormFields]: {
+    formField: FormState;
   };
 }
 
@@ -49,6 +48,11 @@ export const paginationReducer = (state: StoreType, action: StoreActions) => {
       return {
         ...state,
         pokemonType: action.payload.pokemonType,
+      };
+    case 'SET_FORM_FIELDS':
+      return {
+        ...state,
+        formField: action.payload.formField,
       };
     default:
       return state;

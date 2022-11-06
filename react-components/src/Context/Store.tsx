@@ -1,17 +1,6 @@
 import React, { Dispatch, useReducer } from 'react';
-import { paginationReducer, StoreActions } from 'redusers/reduser';
-
-export interface StoreType {
-  page: number;
-  pageSize: number;
-  pokemonType: string;
-}
-
-const initialState = {
-  page: 1,
-  pageSize: 20,
-  pokemonType: '',
-};
+import { paginationReducer, StoreActions } from 'context/reduser';
+import { initialState, StoreType } from './constants';
 
 export const ContextApp = React.createContext<{
   state: StoreType;

@@ -1,3 +1,4 @@
+import { ContextApp } from 'context/Store';
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { SubmitContext } from '../../context/SubmitContext';
@@ -17,6 +18,7 @@ const FormInner: React.FC<FormInnerProps> = (props) => {
   const { type = 'text', label, reference, name, valid, errormassege, children, testId } = props;
 
   const onChange = useContext(SubmitContext);
+  const { state } = useContext(ContextApp);
 
   if (type === 'select') {
     return (
@@ -24,7 +26,7 @@ const FormInner: React.FC<FormInnerProps> = (props) => {
         <h3>{label}</h3>
         <StyledSelect
           name={name}
-          defaultValue="default"
+          value={state.formFields.gender}
           data-testid={testId}
           ref={reference as React.RefObject<HTMLSelectElement>}
           $vaild={!!valid}

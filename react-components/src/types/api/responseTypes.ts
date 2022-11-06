@@ -72,8 +72,8 @@ export type SearchType = {
 };
 export type TypeResponse = {
   [key: string]: any;
-  pokemon: SearchType[]
-}
+  pokemon: SearchType[];
+};
 export type PokemonInfo = {
   abilities: Abilities;
   base_experience: number;

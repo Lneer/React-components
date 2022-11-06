@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Spin, Select } from 'antd';
-import { Option } from 'antd/lib/mentions';
-import { responseAdapter, imageUrlAdapter, getAPIResourceList } from 'utils';
-import { ApiCard, Modal, ModalInner, PageHero, PageNumbers, Search } from 'components';
+import { responseAdapter, getAPIResourceList, pagination } from 'utils';
+import { Album, Modal, ModalInner, PageHero, PageNumbers, Search } from 'components';
 import { ContextApp } from 'context/Store';
-import { NamedAPIResource, NamedAPIResourceList } from 'types/api/responseTypes';
-import { Types } from 'redusers/reduser';
+import { Actions } from 'context/actions';
+import { NamedAPIResource } from 'types/api/responseTypes';
 
 const MainPage: React.FC = () => {
   const context = useContext(ContextApp);
@@ -24,11 +23,14 @@ const MainPage: React.FC = () => {
 
   useEffect(() => {
     if (state.pokemonType) {
-      apiLoader(`https://pokeapi.co/api/v2/type/${state.pokemonType}`);
+      apiLoader(`https://pokeapi.co/api/v2/type/${state.pokemonType}`).then((response) => {
+        const paginationResponse = pagination(response, state.page, state.pageSize);
+        setResourceList(paginationResponse);
+      });
     } else {
       const fullUrl = `https://pokeapi.co/api/v2/pokemon?limit=${state.pageSize}
       &offset=${state.pageSize * (state.page - 1)}`;
-      apiLoader(fullUrl);
+      apiLoader(fullUrl).then((response) => setResourceList(response));
     }
 
     getAPIResourceList('https://pokeapi.co/api/v2/type').then((pokemonTypes) => {
@@ -40,34 +42,28 @@ const MainPage: React.FC = () => {
     setSearchValue(localStorage.getItem('searchValue') || '');
   }, []);
 
-  const apiLoader = (url: string) => {
-    getAPIResourceList(url).then((resourceList) => {
-      const adaptedResourceList = responseAdapter(resourceList);
-      setResourceList(adaptedResourceList);
-    });
+  const apiLoader = async (url: string) => {
+    const resourceList = await getAPIResourceList(url);
+    return responseAdapter(resourceList);
   };
 
   const changeHandler = (page: number, pageSize: number) => {
     context.dispatch({
-      type: 'SET_PAGE' as Types.SetPage,
+      type: 'SET_PAGE' as Actions.SetPage,
       payload: { page },
     });
 
     context.dispatch({
-      type: 'SET_PAGE_SIZE' as Types.SetPageSize,
+      type: 'SET_PAGE_SIZE' as Actions.SetPageSize,
       payload: { pageSize },
     });
   };
 
   const changeTypeHandler = (pokemonType: unknown) => {
     context.dispatch({
-      type: 'SET_POKEMON_TYPE' as Types.setPokemonType,
+      type: 'SET_POKEMON_TYPE' as Actions.setPokemonType,
       payload: { pokemonType } as { pokemonType: string },
     });
-  };
-
-  const filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {
-    return elem.results.filter((pokemon) => pokemon.name.includes(searchValue));
   };
 
   const modalViewClose = () => {
@@ -78,27 +74,8 @@ const MainPage: React.FC = () => {
     if (!event) {
       return;
     }
-
     const pokemonName = event.currentTarget.alt;
-
     setCardInfoLink(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-  };
-
-  const AlbumRender = () => {
-    return filter(resourceList).map((pokemon) => (
-      <ApiCard
-        key={pokemon.name}
-        name={pokemon.name}
-        img={imageUrlAdapter(pokemon.url)}
-        onClick={(event?: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-          getCardInfo(event);
-        }}
-        onError={(event) => {
-          event.currentTarget.onerror = null;
-          event.currentTarget.src = './logo512.png';
-        }}
-      />
-    ));
   };
 
   if (resourceList.count === 0) {
@@ -114,21 +91,24 @@ const MainPage: React.FC = () => {
       </SearchSection>
 
       <FilterContainer>
-        <StyledSelect
-          size="large"
-          onChange={changeTypeHandler}
-          defaultValue={state.pokemonType}
-          allowClear={true}
-        >
-          {pokemonTypes.map((type) => (
-            <Option key={type.name} value={type.name}>
-              {type.name}
-            </Option>
-          ))}
-        </StyledSelect>
+        <div>
+          <FilterHeader>Pokemon type</FilterHeader>
+          <StyledSelect
+            size="large"
+            onChange={changeTypeHandler}
+            defaultValue={state.pokemonType}
+            allowClear={true}
+          >
+            {pokemonTypes.map((type) => (
+              <Select.Option key={type.name} value={type.name}>
+                {type.name}
+              </Select.Option>
+            ))}
+          </StyledSelect>
+        </div>
       </FilterContainer>
 
-      <AlbumContainer>{AlbumRender()}</AlbumContainer>
+      <Album searchValue={searchValue} resourceList={resourceList} onClick={getCardInfo} />
 
       <PageNumbers
         total={resourceList.count}
@@ -145,27 +125,30 @@ const MainPage: React.FC = () => {
   );
 };
 
-const SearchSection = styled.section`
-  width: 100%;
-  height: 10vh;
-
+const flexCss = css`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-const AlbumContainer = styled.section`
-  display: grid;
-  justify-content: space-between;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-auto-flow: dense;
+
+const SearchSection = styled.section`
+  width: 100%;
+  height: 10vh;
+  ${flexCss}
 `;
 
 const FilterContainer = styled.section`
-  display: flex;
+  width: 100%;
+  padding-bottom: 1rem;
+  ${flexCss}
+`;
+
+const FilterHeader = styled.h3`
+  text-align: center;
+  color: black;
 `;
 
 const StyledSelect = styled(Select)`
   width: 10rem;
-  padding-left: 1rem;
 `;
 export default MainPage;

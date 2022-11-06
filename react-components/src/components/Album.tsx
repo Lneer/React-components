@@ -1,18 +1,33 @@
-import Card from 'components/Card/Card';
+import { ApiCard } from 'components';
 import React from 'react';
 import styled from 'styled-components';
-import Pokemon from 'types/pokemon';
+import { NamedAPIResourceList } from 'types/api/responseTypes';
+import { imageUrlAdapter, responseAdapter } from 'utils';
 
 interface AlbumProps {
-  data?: Pokemon[];
+  searchValue: string;
+  resourceList: ReturnType<typeof responseAdapter>;
+  onClick: () => void;
 }
 
-const Album: React.FC<AlbumProps> = ({ data }) => {
-  if (!data?.length) return <h3>No pokemons here...</h3>;
+const Album: React.FC<AlbumProps> = (props) => {
+  const filter = (elem: Pick<NamedAPIResourceList, 'results'>) => {
+    return elem.results.filter((pokemon) => pokemon.name.includes(props.searchValue));
+  };
+
   return (
     <AlbumContainer>
-      {data.map((elem) => (
-        <Card key={elem.id} pokemon={elem} />
+      {filter(props.resourceList).map((pokemon) => (
+        <ApiCard
+          key={pokemon.name}
+          name={pokemon.name}
+          img={imageUrlAdapter(pokemon.url)}
+          onClick={props.onClick}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = './logo512.png';
+          }}
+        />
       ))}
     </AlbumContainer>
   );
