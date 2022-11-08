@@ -19,6 +19,9 @@ const ModalPage: React.FC = () => {
 const StyledModalContainer = styled.div`
   width: 50%;
   margin: 0 auto;
-  padding-top: 2rem; ;
+  margin-top: 2rem;
+  border: 5px solid var(--card-primary);
+  border-bottom-right-radius: 35px;
+  border-top-right-radius: 35px;
 `;
 export default ModalPage;
