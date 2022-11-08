@@ -26,7 +26,11 @@ interface StorePayloads {
   };
 
   [Actions.setFormFields]: {
-    formField: FormState;
+    formFields: FormState;
+  };
+
+  [Actions.setFirstFormChange]: {
+    firstFormChange: boolean;
   };
 }
 
@@ -39,20 +43,29 @@ export const paginationReducer = (state: StoreType, action: StoreActions) => {
         ...state,
         page: action.payload.page,
       };
+
     case 'SET_PAGE_SIZE':
       return {
         ...state,
         pageSize: action.payload.pageSize,
       };
+
     case 'SET_POKEMON_TYPE':
       return {
         ...state,
         pokemonType: action.payload.pokemonType,
       };
+
     case 'SET_FORM_FIELDS':
       return {
         ...state,
-        formField: action.payload.formField,
+        formFields: action.payload.formFields,
+      };
+
+    case 'SET_FIRST_FORM_CHANGE':
+      return {
+        ...state,
+        firstFormChange: action.payload.firstFormChange,
       };
     default:
       return state;

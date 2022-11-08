@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { SubmitContext } from 'context/SubmitContext';
 import { validateConditions } from 'utils/formValidateConditions';
 import FormInner from './FormInner';
 import { UserData } from 'types/form/userData';
+import { ContextApp } from 'context/Store';
+import { Actions } from 'context/actions';
 
 interface FormProps {
   sendCard: (data: UserData) => void;
@@ -15,7 +17,6 @@ interface FormExtension {
 
 const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [firstChangeForm, setFirstChangeForm] = useState<boolean>(false);
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
   const [name, setName] = useState<boolean>(false);
   const [nick, setNick] = useState<boolean>(false);
@@ -23,7 +24,6 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
   const [file, setFile] = useState<boolean>(false);
   const [gender, setGender] = useState<boolean>(false);
   const [swap, setSwap] = useState<boolean>(false);
-  const [hobby, setHobby] = useState<Set<string>>(new Set(''));
 
   const nameInput = useRef<HTMLInputElement>();
   const nickNameInput = useRef<HTMLInputElement>();
@@ -32,40 +32,100 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
   const switchInput = useRef<HTMLInputElement>();
   const genderSelect = useRef<HTMLSelectElement>();
 
+  const { state, dispatch } = useContext(ContextApp);
+
+  const { storedName, nickName, birthday, avatar, confirm, storedGender, hobby } = state.formFields;
+  const { firstFormChange } = state;
+
   useEffect(() => {
     if (!loaded) return;
-    if (!firstChangeForm) {
+
+    if (!firstFormChange) {
       setButtonDisabled(false);
       return;
     }
+
     if (name && nick && date && file && gender && swap) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
     }
-  }, [loaded, name, nick, date, file, gender, swap, firstChangeForm]);
+  }, [loaded, name, nick, date, file, gender, swap, firstFormChange]);
+
+  useLayoutEffect(() => {
+    if (
+      nameInput.current &&
+      nickNameInput.current &&
+      dateInput.current &&
+      fileInput.current &&
+      switchInput.current &&
+      genderSelect.current
+    ) {
+      nameInput.current.value = storedName || '';
+      nickNameInput.current.value = nickName || '';
+      dateInput.current.value = birthday || '';
+      fileInput.current.files = avatar || null;
+      switchInput.current.checked = confirm || false;
+      genderSelect.current.value = storedGender || 'default';
+    }
+  }, [storedName, nickName, birthday, avatar, confirm, storedGender]);
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const name = event.target.name;
+
     setLoaded(true);
+
     switch (name) {
       case 'name':
         setName(validateConditions(nameInput));
+        dispatch({
+          type: Actions.setFormFields,
+          payload: { formFields: { ...state.formFields, storedName: nameInput.current!.value } },
+        });
         break;
+
       case 'nick':
         setNick(validateConditions(nickNameInput));
+        dispatch({
+          type: Actions.setFormFields,
+          payload: { formFields: { ...state.formFields, nickName: nickNameInput.current!.value } },
+        });
         break;
+
       case 'date':
         setDate(validateConditions(dateInput));
+        dispatch({
+          type: Actions.setFormFields,
+          payload: { formFields: { ...state.formFields, birthday: dateInput.current!.value } },
+        });
         break;
+
       case 'file':
         setFile(validateConditions(fileInput));
+        dispatch({
+          type: Actions.setFormFields,
+          payload: { formFields: { ...state.formFields, avatar: fileInput.current!.files } },
+        });
         break;
+
       case 'switch':
+        dispatch({
+          type: Actions.setFormFields,
+          payload: {
+            formFields: { ...state.formFields, confirm: switchInput.current!.checked },
+          },
+        });
         setSwap(validateConditions(switchInput));
         break;
+
       case 'gender':
         setGender(validateConditions(genderSelect));
+        dispatch({
+          type: Actions.setFormFields,
+          payload: {
+            formFields: { ...state.formFields, storedGender: genderSelect.current!.value },
+          },
+        });
         break;
       default:
         return;
@@ -73,7 +133,7 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
   };
 
   const showError = (fieldState: boolean) => {
-    return firstChangeForm ? fieldState : true;
+    return firstFormChange ? fieldState : true;
   };
 
   const hobbyHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,13 +141,22 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
     const userHobby = new Set([...hobby]);
 
     userHobby.has(value) ? userHobby.delete(value) : userHobby.add(value);
-    setHobby(userHobby);
+    dispatch({
+      type: Actions.setFormFields,
+      payload: {
+        formFields: { ...state.formFields, hobby: userHobby },
+      },
+    });
     setLoaded(true);
   };
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    setFirstChangeForm(true);
+    // setFirstChangeForm(true);
+    dispatch({
+      type: Actions.setFirstFormChange,
+      payload: { ...state, firstFormChange: true },
+    });
 
     const userData = {
       name: nameInput.current!.value,
@@ -104,12 +173,24 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
   };
 
   const resetStateInputs = () => {
-    !nameInput.current ? nameInput.current : (nameInput.current.value = '');
-    !nickNameInput.current ? nameInput.current : (nickNameInput.current.value = '');
-    !dateInput.current ? nameInput.current : (dateInput.current.value = '');
-    !fileInput.current ? nameInput.current : (fileInput.current.value = '');
-    !switchInput.current ? nameInput.current : (switchInput.current.checked = false);
-    !genderSelect.current ? nameInput.current : (genderSelect.current.value = 'default');
+    dispatch({
+      type: Actions.setFormFields,
+      payload: {
+        formFields: {
+          storedName: '',
+          nickName: '',
+          birthday: '',
+          avatar: null,
+          storedGender: 'default',
+          hobby: new Set(''),
+          confirm: false,
+        },
+      },
+    });
+    dispatch({
+      type: Actions.setFirstFormChange,
+      payload: { ...state, firstFormChange: false },
+    });
     hobby.clear();
     setName(false);
     setNick(false);
@@ -118,7 +199,6 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
     setGender(false);
     setSwap(false);
     setButtonDisabled(true);
-    setFirstChangeForm(false);
     setLoaded(false);
   };
   const userHobbies = ['Basket ball', 'Video games', 'Photo', 'Sport', 'Read book', 'Hand made'];

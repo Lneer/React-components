@@ -7,7 +7,7 @@ import { imageUrlAdapter, responseAdapter } from 'utils';
 interface AlbumProps {
   searchValue: string;
   resourceList: ReturnType<typeof responseAdapter>;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Album: React.FC<AlbumProps> = (props) => {

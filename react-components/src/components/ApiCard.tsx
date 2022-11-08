@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import pokeBallImg from '../assets/pokeBall.svg';
 
@@ -9,7 +10,7 @@ interface ApiCardProps {
   onError?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
 }
 
-const ApiCard: React.FC<ApiCardProps> = ({ name, img, onClick = () => {}, onError = () => {} }) => {
+const ApiCard: React.FC<ApiCardProps> = ({ name, img, onError = () => {} }) => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   const setCardSelector = (): void => {
@@ -41,7 +42,10 @@ const ApiCard: React.FC<ApiCardProps> = ({ name, img, onClick = () => {}, onErro
     <>
       <CardWrapper>
         <CardBody>
-          <CardImage data-set={name} src={img} alt={name} onClick={onClick} onError={onError} />
+          <Link to={`/${name}`}>
+            <CardImage data-set={name} src={img} alt={name} onError={onError} />
+          </Link>
+
           <DescriptionWrapper $isSelect={isSelected}>
             <Description $isSelect={false}>
               {cardTitle()}

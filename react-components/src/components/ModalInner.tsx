@@ -5,22 +5,18 @@ import { capitalize, getAltImageSrc, getImageSrc, getAPIResourceList } from 'uti
 import { FullType, PokemonInfo } from 'types/api/responseTypes';
 import { Type } from 'types/pokemon';
 import { TypeIcons } from '../assets/pokemon-type-icons';
+import { useParams } from 'react-router-dom';
 
-interface ModalInnerProps {
-  link?: string;
-}
-
-const ModalInner: React.FC<ModalInnerProps> = ({ link }) => {
+const ModalInner: React.FC = () => {
+  const { pokemonName } = useParams();
   const [info, setInfo] = useState<PokemonInfo | null>(null);
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!link) {
-      setInfo(null);
-    }
-
-    getAPIResourceList(link as string).then((modalInfo) => setInfo(modalInfo));
-  }, [link]);
+    getAPIResourceList(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`).then((modalInfo) =>
+      setInfo(modalInfo)
+    );
+  }, [pokemonName]);
 
   if (!info) {
     return <Spin size="large" spinning={true} />;

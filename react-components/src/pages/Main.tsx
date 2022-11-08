@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Spin, Select } from 'antd';
 import { responseAdapter, getAPIResourceList, pagination } from 'utils';
-import { Album, Modal, ModalInner, PageHero, PageNumbers, Search } from 'components';
+import { Album, PageHero, PageNumbers, Search } from 'components';
 import { ContextApp } from 'context/Store';
 import { Actions } from 'context/actions';
 import { NamedAPIResource } from 'types/api/responseTypes';
@@ -16,7 +16,6 @@ const MainPage: React.FC = () => {
     results: [],
   });
 
-  const [cardInfoLink, setCardInfoLink] = useState<string>('');
   const [searchValue, setSearchValue] = useState<string>('');
 
   const [pokemonTypes, setPokemonTypes] = useState<NamedAPIResource[]>([]);
@@ -66,18 +65,6 @@ const MainPage: React.FC = () => {
     });
   };
 
-  const modalViewClose = () => {
-    setCardInfoLink('');
-  };
-
-  const getCardInfo = (event?: React.MouseEvent<HTMLImageElement>) => {
-    if (!event) {
-      return;
-    }
-    const pokemonName = event.currentTarget.alt;
-    setCardInfoLink(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-  };
-
   if (resourceList.count === 0) {
     return <Spin size="large" spinning={true} />;
   }
@@ -108,7 +95,7 @@ const MainPage: React.FC = () => {
         </div>
       </FilterContainer>
 
-      <Album searchValue={searchValue} resourceList={resourceList} onClick={getCardInfo} />
+      <Album searchValue={searchValue} resourceList={resourceList} />
 
       <PageNumbers
         total={resourceList.count}
@@ -117,10 +104,6 @@ const MainPage: React.FC = () => {
         pageSizeOptions={['20', '50', '100']}
         onChange={changeHandler}
       />
-
-      <Modal visible={!!cardInfoLink} onClose={modalViewClose}>
-        <ModalInner link={cardInfoLink} />
-      </Modal>
     </>
   );
 };

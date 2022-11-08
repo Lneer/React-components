@@ -3,25 +3,26 @@ export interface StoreType {
   pageSize: number;
   pokemonType: string;
   formFields: FormState;
+  firstFormChange: boolean;
 }
 
 export interface FormState {
-  name: string;
+  storedName: string;
   nickName: string;
   birthday: string;
-  avatar: string;
-  gender: string;
-  hobby: string[];
+  avatar: FileList | null;
+  storedGender?: string;
+  hobby: Set<string>;
   confirm: boolean;
 }
 
 const initialFormFields: FormState = {
-  name: '',
+  storedName: '',
   nickName: '',
   birthday: '',
-  avatar: '',
-  gender: 'default',
-  hobby: [],
+  avatar: null,
+  storedGender: 'default',
+  hobby: new Set(''),
   confirm: false,
 };
 
@@ -30,4 +31,5 @@ export const initialState = {
   pageSize: 20,
   pokemonType: '',
   formFields: initialFormFields,
+  firstFormChange: false,
 };

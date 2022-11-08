@@ -1,4 +1,3 @@
-import { ContextApp } from 'context/Store';
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { SubmitContext } from '../../context/SubmitContext';
@@ -12,13 +11,23 @@ interface FormInnerProps {
   errormassege?: string;
   children?: React.ReactNode;
   testId?: string;
+  value?: string;
 }
 
 const FormInner: React.FC<FormInnerProps> = (props) => {
-  const { type = 'text', label, reference, name, valid, errormassege, children, testId } = props;
+  const {
+    type = 'text',
+    label,
+    reference,
+    name,
+    valid,
+    errormassege,
+    children,
+    testId,
+    value,
+  } = props;
 
   const onChange = useContext(SubmitContext);
-  const { state } = useContext(ContextApp);
 
   if (type === 'select') {
     return (
@@ -26,7 +35,7 @@ const FormInner: React.FC<FormInnerProps> = (props) => {
         <h3>{label}</h3>
         <StyledSelect
           name={name}
-          value={state.formFields.gender}
+          value={value}
           data-testid={testId}
           ref={reference as React.RefObject<HTMLSelectElement>}
           $vaild={!!valid}
@@ -68,6 +77,7 @@ const FormInner: React.FC<FormInnerProps> = (props) => {
       <StyledInputWrapper $vaild={!!valid}>
         <StyledInput
           name={name}
+          value={value}
           type={type}
           ref={reference as React.RefObject<HTMLInputElement>}
           onChange={onChange}
