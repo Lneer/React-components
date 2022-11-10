@@ -1,10 +1,11 @@
 import React, { Dispatch, useReducer } from 'react';
-import { paginationReducer, StoreActions } from 'context/reduser';
+import { paginationReducer } from 'context/reduser';
 import { initialState, StoreType } from './constants';
+import { ActionType } from './actions';
 
 export const ContextApp = React.createContext<{
   state: StoreType;
-  dispatch: Dispatch<StoreActions>;
+  dispatch: Dispatch<ActionType>;
 }>({
   state: initialState,
   dispatch: () => null,

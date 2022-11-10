@@ -5,7 +5,7 @@ import { validateConditions } from 'utils/formValidateConditions';
 import FormInner from './FormInner';
 import { UserData } from 'types/form/userData';
 import { ContextApp } from 'context/Store';
-import { Actions } from 'context/actions';
+import { setFirstFormChange, setFormField } from 'context/actions';
 
 interface FormProps {
   sendCard: (data: UserData) => void;
@@ -78,54 +78,32 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
     switch (name) {
       case 'name':
         setName(validateConditions(nameInput));
-        dispatch({
-          type: Actions.setFormFields,
-          payload: { formFields: { ...state.formFields, storedName: nameInput.current!.value } },
-        });
+        dispatch(setFormField({ ...state.formFields, storedName: nameInput.current!.value }));
         break;
 
       case 'nick':
         setNick(validateConditions(nickNameInput));
-        dispatch({
-          type: Actions.setFormFields,
-          payload: { formFields: { ...state.formFields, nickName: nickNameInput.current!.value } },
-        });
+        dispatch(setFormField({ ...state.formFields, nickName: nickNameInput.current!.value }));
         break;
 
       case 'date':
         setDate(validateConditions(dateInput));
-        dispatch({
-          type: Actions.setFormFields,
-          payload: { formFields: { ...state.formFields, birthday: dateInput.current!.value } },
-        });
+        dispatch(setFormField({ ...state.formFields, birthday: dateInput.current!.value }));
         break;
 
       case 'file':
         setFile(validateConditions(fileInput));
-        dispatch({
-          type: Actions.setFormFields,
-          payload: { formFields: { ...state.formFields, avatar: fileInput.current!.files } },
-        });
+        dispatch(setFormField({ ...state.formFields, avatar: fileInput.current!.files }));
         break;
 
       case 'switch':
-        dispatch({
-          type: Actions.setFormFields,
-          payload: {
-            formFields: { ...state.formFields, confirm: switchInput.current!.checked },
-          },
-        });
+        dispatch(setFormField({ ...state.formFields, confirm: switchInput.current!.checked }));
         setSwap(validateConditions(switchInput));
         break;
 
       case 'gender':
         setGender(validateConditions(genderSelect));
-        dispatch({
-          type: Actions.setFormFields,
-          payload: {
-            formFields: { ...state.formFields, storedGender: genderSelect.current!.value },
-          },
-        });
+        dispatch(setFormField({ ...state.formFields, storedGender: genderSelect.current!.value }));
         break;
       default:
         return;
@@ -141,22 +119,13 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
     const userHobby = new Set([...hobby]);
 
     userHobby.has(value) ? userHobby.delete(value) : userHobby.add(value);
-    dispatch({
-      type: Actions.setFormFields,
-      payload: {
-        formFields: { ...state.formFields, hobby: userHobby },
-      },
-    });
+    dispatch(setFormField({ ...state.formFields, hobby: userHobby }));
     setLoaded(true);
   };
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    // setFirstChangeForm(true);
-    dispatch({
-      type: Actions.setFirstFormChange,
-      payload: { ...state, firstFormChange: true },
-    });
+    dispatch(setFirstFormChange(true));
 
     const userData = {
       name: nameInput.current!.value,
@@ -173,24 +142,19 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
   };
 
   const resetStateInputs = () => {
-    dispatch({
-      type: Actions.setFormFields,
-      payload: {
-        formFields: {
-          storedName: '',
-          nickName: '',
-          birthday: '',
-          avatar: null,
-          storedGender: 'default',
-          hobby: new Set(''),
-          confirm: false,
-        },
-      },
-    });
-    dispatch({
-      type: Actions.setFirstFormChange,
-      payload: { ...state, firstFormChange: false },
-    });
+    dispatch(
+      setFormField({
+        storedName: '',
+        nickName: '',
+        birthday: '',
+        avatar: null,
+        storedGender: 'default',
+        hobby: new Set(''),
+        confirm: false,
+      })
+    );
+
+    dispatch(setFirstFormChange(false));
     hobby.clear();
     setName(false);
     setNick(false);

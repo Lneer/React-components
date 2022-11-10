@@ -4,7 +4,7 @@ import { Spin, Select } from 'antd';
 import { responseAdapter, getAPIResourceList, pagination } from 'utils';
 import { Album, PageHero, PageNumbers, Search } from 'components';
 import { ContextApp } from 'context/Store';
-import { Actions } from 'context/actions';
+import { setPage, setPageSize, setPokemonType } from 'context/actions';
 import { NamedAPIResource } from 'types/api/responseTypes';
 
 const MainPage: React.FC = () => {
@@ -47,22 +47,13 @@ const MainPage: React.FC = () => {
   };
 
   const changeHandler = (page: number, pageSize: number) => {
-    context.dispatch({
-      type: 'SET_PAGE' as Actions.SetPage,
-      payload: { page },
-    });
+    context.dispatch(setPage(page));
 
-    context.dispatch({
-      type: 'SET_PAGE_SIZE' as Actions.SetPageSize,
-      payload: { pageSize },
-    });
+    context.dispatch(setPageSize(pageSize));
   };
 
   const changeTypeHandler = (pokemonType: unknown) => {
-    context.dispatch({
-      type: 'SET_POKEMON_TYPE' as Actions.setPokemonType,
-      payload: { pokemonType } as { pokemonType: string },
-    });
+    context.dispatch(setPokemonType(pokemonType as string));
   };
 
   if (resourceList.count === 0) {
