@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { SubmitContext } from 'context/SubmitContext';
 import { validateConditions } from 'utils/formValidateConditions';
 import FormInner from './FormInner';
 import { UserData } from 'types/form/userData';
-import { ContextApp } from 'context/Store';
-import { setFirstFormChange, setFormField } from 'context/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'reduxStore/store';
+import { changeFirstFormChange, changeFormField } from 'reduxStore/formSlice';
 
 interface FormProps {
   sendCard: (data: UserData) => void;
@@ -32,7 +33,8 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
   const switchInput = useRef<HTMLInputElement>();
   const genderSelect = useRef<HTMLSelectElement>();
 
-  const { state, dispatch } = useContext(ContextApp);
+  const state = useSelector((state: RootState) => state.form);
+  const dispatch = useDispatch();
 
   const { storedName, nickName, birthday, avatar, confirm, storedGender, hobby } = state.formFields;
   const { firstFormChange } = state;
@@ -78,32 +80,34 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
     switch (name) {
       case 'name':
         setName(validateConditions(nameInput));
-        dispatch(setFormField({ ...state.formFields, storedName: nameInput.current!.value }));
+        dispatch(changeFormField({ ...state.formFields, storedName: nameInput.current!.value }));
         break;
 
       case 'nick':
         setNick(validateConditions(nickNameInput));
-        dispatch(setFormField({ ...state.formFields, nickName: nickNameInput.current!.value }));
+        dispatch(changeFormField({ ...state.formFields, nickName: nickNameInput.current!.value }));
         break;
 
       case 'date':
         setDate(validateConditions(dateInput));
-        dispatch(setFormField({ ...state.formFields, birthday: dateInput.current!.value }));
+        dispatch(changeFormField({ ...state.formFields, birthday: dateInput.current!.value }));
         break;
 
       case 'file':
         setFile(validateConditions(fileInput));
-        dispatch(setFormField({ ...state.formFields, avatar: fileInput.current!.files }));
+        dispatch(changeFormField({ ...state.formFields, avatar: fileInput.current!.files }));
         break;
 
       case 'switch':
-        dispatch(setFormField({ ...state.formFields, confirm: switchInput.current!.checked }));
+        dispatch(changeFormField({ ...state.formFields, confirm: switchInput.current!.checked }));
         setSwap(validateConditions(switchInput));
         break;
 
       case 'gender':
         setGender(validateConditions(genderSelect));
-        dispatch(setFormField({ ...state.formFields, storedGender: genderSelect.current!.value }));
+        dispatch(
+          changeFormField({ ...state.formFields, storedGender: genderSelect.current!.value })
+        );
         break;
       default:
         return;
@@ -119,13 +123,13 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
     const userHobby = new Set([...hobby]);
 
     userHobby.has(value) ? userHobby.delete(value) : userHobby.add(value);
-    dispatch(setFormField({ ...state.formFields, hobby: userHobby }));
+    dispatch(changeFormField({ ...state.formFields, hobby: userHobby }));
     setLoaded(true);
   };
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    dispatch(setFirstFormChange(true));
+    dispatch(changeFirstFormChange(true));
 
     const userData = {
       name: nameInput.current!.value,
@@ -143,7 +147,7 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
 
   const resetStateInputs = () => {
     dispatch(
-      setFormField({
+      changeFormField({
         storedName: '',
         nickName: '',
         birthday: '',
@@ -154,8 +158,7 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
       })
     );
 
-    dispatch(setFirstFormChange(false));
-    hobby.clear();
+    dispatch(changeFirstFormChange(false));
     setName(false);
     setNick(false);
     setDate(false);
@@ -272,281 +275,6 @@ const Form: React.FC<FormProps> & FormExtension = ({ sendCard }) => {
 };
 
 Form.Item = FormInner;
-
-// class Form extends Component<SimpleFormProps, SimpleFormState> {
-//   static SubmitContext = SubmitContext;
-//   static Item = FormInner;
-
-//   nameInput: React.RefObject<HTMLInputElement> = React.createRef();
-//   nickNameInput: React.RefObject<HTMLInputElement> = React.createRef();
-//   dateInput: React.RefObject<HTMLInputElement> = React.createRef();
-//   fileInput: React.RefObject<HTMLInputElement> = React.createRef();
-//   switchInput: React.RefObject<HTMLInputElement> = React.createRef();
-//   genderSelect: React.RefObject<HTMLSelectElement> = React.createRef();
-
-//   hobby = new Set<string>();
-
-//   defaultState = {
-//     firstChangeForm: false,
-//     buttonDisabled: true,
-//     name: false,
-//     nick: false,
-//     date: false,
-//     file: false,
-//     gender: false,
-//     switch: false,
-//     hobbySelect: true,
-//   };
-
-//   state = this.defaultState;
-
-//   changeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-//     const name = event.target.name;
-//     let currentState: { [key: string]: boolean };
-
-//     switch (name) {
-//       case 'name':
-//         currentState = { [name]: this.validateConditions(this.nameInput) };
-//         break;
-
-//       case 'nick':
-//         currentState = { [name]: this.validateConditions(this.nickNameInput) };
-//         break;
-
-//       case 'date':
-//         currentState = { [name]: this.validateConditions(this.dateInput) };
-//         break;
-
-//       case 'file':
-//         currentState = { [name]: this.validateConditions(this.fileInput) };
-//         break;
-
-//       case 'switch':
-//         currentState = { [name]: this.validateConditions(this.switchInput) };
-//         break;
-
-//       case 'gender':
-//         currentState = { [name]: this.validateConditions(this.genderSelect) };
-//         break;
-
-//       default:
-//         return;
-//     }
-
-//     this.setState((prev) => {
-//       return { ...prev, ...currentState };
-//     }, this.setSubmitButton);
-//   };
-
-//   setSubmitButton = () => {
-//     if (!this.state.firstChangeForm) {
-//       this.setState((prev) => {
-//         return { ...prev, buttonDisabled: false };
-//       });
-//       return;
-//     }
-
-//     if (this.validationAll()) {
-//       this.setState({ buttonDisabled: false });
-//     } else {
-//       this.setState({ buttonDisabled: true });
-//     }
-//   };
-
-//   validateConditions = validateConditions;
-
-//   isValidComponent = (state: keyof typeof this.state, condition: boolean) => {
-//     if (condition) {
-//       this.setState((prev) => {
-//         return { ...prev, [state]: true };
-//       });
-
-//       return true;
-//     } else {
-//       this.setState((prev) => {
-//         return { ...prev, [state]: false };
-//       });
-//       return false;
-//     }
-//   };
-
-//   validationAll = () => {
-//     const isValid = true;
-//     if (
-//       isValid &&
-//       this.state.name &&
-//       this.state.nick &&
-//       this.state.date &&
-//       this.state.file &&
-//       this.state.gender &&
-//       this.state.switch
-//     ) {
-//       return isValid;
-//     }
-//     return false;
-//   };
-
-//   hobbyHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const value = event.target.value.toLowerCase();
-//     this.hobby.has(value) ? this.hobby.delete(value) : this.hobby.add(value);
-//     this.setState({ hobbySelect: true });
-//     this.setSubmitButton();
-//   };
-
-//   showError = (fieldState: boolean) => {
-//     return this.state.firstChangeForm ? fieldState : true;
-//   };
-
-//   submitHandler = (event: React.FormEvent) => {
-//     event.preventDefault();
-//     console.log(this.state);
-
-//     this.setState((prev) => {
-//       return { ...prev, firstChangeForm: true };
-//     });
-
-//     if (!this.validationAll()) {
-//       this.setState((prev) => {
-//         return { ...prev, buttonDisabled: true };
-//       });
-//       return;
-//     }
-
-//     const userData = {
-//       name: this.nameInput.current!.value,
-//       nick: this.nickNameInput.current!.value,
-//       age: new Date().getFullYear() - new Date(this.dateInput.current!.value).getFullYear(),
-//       gender: this.genderSelect.current!.value,
-//       img: URL.createObjectURL(this.fileInput.current!.files![0]),
-//       hobby: Array.from(this.hobby),
-//     };
-
-//     this.props.sendCard(userData);
-//     alert('data submited');
-//     this.resetStateInputs();
-//   };
-
-//   resetStateInputs = () => {
-//     !this.nameInput.current ? this.nameInput.current : (this.nameInput.current.value = '');
-//     !this.nickNameInput.current ? this.nameInput.current : (this.nickNameInput.current.value = '');
-//     !this.dateInput.current ? this.nameInput.current : (this.dateInput.current.value = '');
-//     !this.fileInput.current ? this.nameInput.current : (this.fileInput.current.value = '');
-//     !this.switchInput.current ? this.nameInput.current : (this.switchInput.current.checked = false);
-//     !this.genderSelect.current
-//       ? this.nameInput.current
-//       : (this.genderSelect.current.value = 'default');
-//     this.hobby.clear();
-//     this.setState(this.defaultState);
-//   };
-
-//   render() {
-//     const hobby = ['Basket ball', 'Video games', 'Photo', 'Sport', 'Read book', 'Hand made'];
-
-//     return (
-//       <SubmitContext.Provider value={this.changeHandler}>
-//         <StyledForm onSubmit={this.submitHandler} data-testid="form">
-//           <Form.Item
-//             label="Name:"
-//             name="name"
-//             type="text"
-//             reference={this.nameInput}
-//             valid={this.showError(this.state.name)}
-//             errormassege="The field must contain from 3 to 12 characters"
-//             testId="name"
-//           />
-
-//           <Form.Item
-//             label="Nick name:"
-//             name="nick"
-//             type="text"
-//             reference={this.nickNameInput}
-//             valid={this.showError(this.state.nick)}
-//             errormassege="The field must contain from 3 to 12 characters"
-//             testId="nick"
-//           />
-
-//           <Form.Item
-//             label="Birth Day:"
-//             name="date"
-//             type="date"
-//             reference={this.dateInput}
-//             valid={this.showError(this.state.date)}
-//             errormassege="Your age must be between 3 and 100 years old"
-//             testId="date"
-//           />
-
-//           <Form.Item
-//             label="Avatar:"
-//             name="file"
-//             type="file"
-//             reference={this.fileInput}
-//             valid={this.showError(this.state.file)}
-//             errormassege="Choose you avatar"
-//             testId="avatar"
-//           />
-
-//           <Form.Item
-//             label="Gender: "
-//             name="gender"
-//             type="select"
-//             reference={this.genderSelect}
-//             valid={this.showError(this.state.gender)}
-//             errormassege="how do you feel"
-//             testId="gender"
-//           >
-//             <option value="default">---</option>
-//             <option value="male">male</option>
-//             <option value="female">female</option>
-//             <option value="other">other</option>
-//           </Form.Item>
-
-//           <StyledField>
-//             <legend>
-//               <h3>Select hobby </h3>
-//             </legend>
-//             <StyledCheckBoxWrapper data-testid="hobby">
-//               {hobby.map((hobby) => {
-//                 return (
-//                   <label key={hobby}>
-//                     <span>{hobby}</span>
-//                     <input
-//                       type="checkbox"
-//                       value={hobby.toLowerCase()}
-//                       checked={this.hobby.has(hobby.toLowerCase())}
-//                       onChange={this.hobbyHandler}
-//                       data-testid={hobby}
-//                     />
-//                   </label>
-//                 );
-//               })}
-//             </StyledCheckBoxWrapper>
-//           </StyledField>
-
-//           <Form.Item
-//             label="Confirm data:"
-//             name="switch"
-//             type="switch"
-//             reference={this.switchInput}
-//             valid={this.showError(this.state.switch)}
-//             errormassege="Check data"
-//             testId="check"
-//           />
-
-//           <div>
-//             <StyledSubmitInput
-//               id="submit"
-//               type="submit"
-//               name="submit"
-//               disabled={this.state.buttonDisabled}
-//               data-testid="submit"
-//             />
-//             <StyledSubmitLabel htmlFor="submit">Submit</StyledSubmitLabel>
-//           </div>
-//         </StyledForm>
-//       </SubmitContext.Provider>
-//     );
-//   }
-// }
 
 const StyledForm = styled.form`
   display: flex;

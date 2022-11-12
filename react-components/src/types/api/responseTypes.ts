@@ -70,10 +70,12 @@ export type SearchType = {
   slot: number;
   pokemon: NamedAPIResource;
 };
+
 export type TypeResponse = {
-  [key: string]: any;
+  [key: string]: unknown;
   pokemon: SearchType[];
 };
+
 export type PokemonInfo = {
   abilities: Abilities;
   base_experience: number;
@@ -93,3 +95,4 @@ export type PokemonInfo = {
   types: FullType[];
   weight: number;
 };
+export type ResponseAdapter = NamedAPIResourceList | TypeResponse;

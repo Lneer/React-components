@@ -1,7 +1,16 @@
-import { NamedAPIResource, NamedAPIResourceList, TypeResponse } from 'types/api/responseTypes';
+import { NamedAPIResource, NamedAPIResourceList, ResponseAdapter } from 'types/api/responseTypes';
 
-const responseAdapter = (response: NamedAPIResourceList | TypeResponse) => {
-  if ('count' in response) {
+function determinedInstance(
+  toBeDetermined: ResponseAdapter
+): toBeDetermined is NamedAPIResourceList {
+  if ((toBeDetermined as NamedAPIResourceList).count) {
+    return true;
+  }
+  return false;
+}
+
+const responseAdapter = (response: ResponseAdapter) => {
+  if (determinedInstance(response)) {
     return {
       count: response.count as number,
       results: response.results as NamedAPIResource[],

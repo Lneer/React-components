@@ -1,62 +1,46 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Spin, Select } from 'antd';
-import { responseAdapter, getAPIResourceList, pagination } from 'utils';
 import { Album, PageHero, PageNumbers, Search } from 'components';
-import { ContextApp } from 'context/Store';
-import { setPage, setPageSize, setPokemonType } from 'context/actions';
-import { NamedAPIResource } from 'types/api/responseTypes';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePage, changePageSize, changeType } from 'reduxStore/mainPageSlice';
+import { AppDispatch, RootState } from 'reduxStore/store';
+import { fetchResourceList, fetchPokemonType } from 'reduxStore/apiSlice';
 
 const MainPage: React.FC = () => {
-  const context = useContext(ContextApp);
-  const { state } = context;
-
-  const [resourceList, setResourceList] = useState<ReturnType<typeof responseAdapter>>({
-    count: 0,
-    results: [],
-  });
-
+  const state = useSelector((state: RootState) => state.mainPage);
+  const apistate = useSelector((state: RootState) => state.api);
+  const dispatch = useDispatch<AppDispatch>();
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const [pokemonTypes, setPokemonTypes] = useState<NamedAPIResource[]>([]);
+  useEffect(() => {
+    dispatch(
+      fetchResourceList({
+        page: state.page,
+        pageSize: state.pageSize,
+        pokemonType: state.pokemonType,
+      })
+    );
+  }, [state.page, state.pageSize, state.pokemonType, dispatch]);
 
   useEffect(() => {
-    if (state.pokemonType) {
-      apiLoader(`https://pokeapi.co/api/v2/type/${state.pokemonType}`).then((response) => {
-        const paginationResponse = pagination(response, state.page, state.pageSize);
-        setResourceList(paginationResponse);
-      });
-    } else {
-      const fullUrl = `https://pokeapi.co/api/v2/pokemon?limit=${state.pageSize}
-      &offset=${state.pageSize * (state.page - 1)}`;
-      apiLoader(fullUrl).then((response) => setResourceList(response));
-    }
-
-    getAPIResourceList('https://pokeapi.co/api/v2/type').then((pokemonTypes) => {
-      setPokemonTypes(pokemonTypes.results);
-    });
-  }, [state.page, state.pageSize, state.pokemonType]);
+    dispatch(fetchPokemonType('https://pokeapi.co/api/v2/type'));
+  }, [dispatch]);
 
   useLayoutEffect(() => {
     setSearchValue(localStorage.getItem('searchValue') || '');
   }, []);
 
-  const apiLoader = async (url: string) => {
-    const resourceList = await getAPIResourceList(url);
-    return responseAdapter(resourceList);
-  };
-
   const changeHandler = (page: number, pageSize: number) => {
-    context.dispatch(setPage(page));
-
-    context.dispatch(setPageSize(pageSize));
+    dispatch(changePage(page));
+    dispatch(changePageSize(pageSize));
   };
 
   const changeTypeHandler = (pokemonType: unknown) => {
-    context.dispatch(setPokemonType(pokemonType as string));
+    dispatch(changeType(pokemonType as string));
   };
 
-  if (resourceList.count === 0) {
+  if (apistate.resourceList.count === 0) {
     return <Spin size="large" spinning={true} />;
   }
 
@@ -77,7 +61,7 @@ const MainPage: React.FC = () => {
             defaultValue={state.pokemonType}
             allowClear={true}
           >
-            {pokemonTypes.map((type) => (
+            {apistate.pokemonTypes.map((type) => (
               <Select.Option key={type.name} value={type.name}>
                 {type.name}
               </Select.Option>
@@ -86,10 +70,10 @@ const MainPage: React.FC = () => {
         </div>
       </FilterContainer>
 
-      <Album searchValue={searchValue} resourceList={resourceList} />
+      <Album searchValue={searchValue} resourceList={apistate.resourceList} />
 
       <PageNumbers
-        total={resourceList.count}
+        total={apistate.resourceList.count}
         defaultPageSize={state.pageSize}
         defaultCurrent={state.page}
         pageSizeOptions={['20', '50', '100']}
