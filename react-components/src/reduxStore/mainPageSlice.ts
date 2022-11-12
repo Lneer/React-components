@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface InitialState {
   page: number;
@@ -14,17 +14,15 @@ const mainPageSlice = createSlice({
     pokemonType: '',
   } as InitialState,
   reducers: {
-    changePage(state, action) {
-      console.log(state);
-      console.log(action);
+    changePage(state, action: PayloadAction<number>) {
       state.page = action.payload;
     },
 
-    changePageSize(state, action) {
+    changePageSize(state, action: PayloadAction<number>) {
       state.pageSize = action.payload;
     },
 
-    changeType(state, action) {
+    changeType(state, action: PayloadAction<string>) {
       state.pokemonType = action.payload;
     },
   },

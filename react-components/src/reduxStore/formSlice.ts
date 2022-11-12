@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FormState } from 'context/constants';
 
 const formReducer = createSlice({
@@ -17,11 +17,11 @@ const formReducer = createSlice({
   },
 
   reducers: {
-    changeFormField(state, action) {
+    changeFormField(state, action: PayloadAction<FormState>) {
       state.formFields = action.payload;
     },
 
-    changeFirstFormChange(state, action) {
+    changeFirstFormChange(state, action: PayloadAction<boolean>) {
       state.firstFormChange = action.payload;
     },
   },

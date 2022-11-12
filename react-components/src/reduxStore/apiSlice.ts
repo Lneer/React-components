@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { NamedAPIResource, ResponseAdapter } from 'types/api/responseTypes';
 import { apiLoader, getAPIResourceList, pagination, responseAdapter } from 'utils';
 
@@ -46,7 +46,7 @@ const apiStateSlice = createSlice({
   } as apiState,
 
   reducers: {
-    changeResourceList(state, action) {
+    changeResourceList(state, action: PayloadAction<ReturnType<typeof responseAdapter>>) {
       state.resourceList = action.payload;
     },
   },
@@ -56,12 +56,14 @@ const apiStateSlice = createSlice({
       .addCase(fetchResourceList.pending, (state) => {
         (state.statusApi = 'loading'), (state.error = null);
       })
-      .addCase(fetchResourceList.fulfilled, (state, action) => {
-        console.log(action),
+      .addCase(
+        fetchResourceList.fulfilled,
+        (state, action: PayloadAction<ReturnType<typeof responseAdapter>>) => {
           (state.statusApi = 'resolved'),
-          (state.error = null),
-          (state.resourceList = responseAdapter(action.payload as ResponseAdapter));
-      })
+            (state.error = null),
+            (state.resourceList = responseAdapter(action.payload as ResponseAdapter));
+        }
+      )
       .addCase(fetchResourceList.rejected, (state) => {
         (state.statusApi = 'rejected'), (state.error = 'action.payload');
       })
